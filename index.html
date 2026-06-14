@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>100 문장 영어 스피킹 암기장</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --primary-hover: #357abd;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-sub: #666666;
+            --accent: #2ecc71;
+        }
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        header {
+            background-color: var(--card-bg);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            color: #2c3e50;
+        }
+        .subtitle {
+            color: var(--text-sub);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        .global-controls {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .global-controls.secondary {
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+        button.stop-btn {
+            background-color: #e74c3c;
+        }
+        button.stop-btn:hover {
+            background-color: #c0392b;
+        }
+        button.outline-btn {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+        button.outline-btn:hover {
+            background-color: #f0f4f8;
+        }
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .card.active {
+            border: 2px solid var(--accent);
+        }
+        .sentence-header {
+            font-size: 14px;
+            color: var(--text-sub);
+            font-weight: bold;
+        }
+        .korean-main {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+            word-break: keep-all;
+        }
+        
+        .english-hidden-container {
+            width: 100%;
+        }
+        .toggle-btn {
+            background-color: #f8fafc;
+            color: var(--primary);
+            border: 2px dashed #cbd5e1;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            width: 100%;
+            text-align: center;
+            transition: all 0.2s;
+            display: block;
+        }
+        .toggle-btn:hover {
+            background-color: #f1f5f9;
+            border-color: var(--primary);
+        }
+        .english-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+            padding: 15px;
+            background-color: #f0f4f8;
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .english-text.show {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 5px;
+        }
+        .card-controls button {
+            background-color: #f8fafc;
+            color: var(--text-sub);
+            border: 1px solid #e2e8f0;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .card-controls button:hover {
+            background-color: #e2e8f0;
+            color: var(--text-main);
+        }
+        
+        @media (max-width: 600px) {
+            .global-controls {
+                flex-direction: column;
+            }
+            .global-controls button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>100 문장 스피킹 암기 훈련</h1>
+        <div class="subtitle">한국어를 보고 영어를 즉각적으로 떠올려 보세요.</div>
+        
+        <div class="global-controls">
+            <button onclick="playAll('en2')">▶ 모드 1: 전체 재생 (영어만 2번)</button>
+            <button onclick="playAll('ko-en2')">▶ 모드 2: 전체 재생 (한글 ➔ 영어 2번)</button>
+            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 모드 3: 암기 모드 시작</button>
+            <button class="stop-btn" onclick="stopAll()">■ 재생 정지</button>
+        </div>
+        <div class="global-controls secondary">
+            <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 전체 영어 정답 보기</button>
+            <button class="outline-btn" onclick="toggleAllEnglish(false)">🙈 전체 영어 정답 숨기기</button>
+        </div>
+    </header>
+
+    <div class="container" id="card-container">
+    </div>
+
+    <div class="container" id="memo-container" style="display: none;">
+        <div class="card active" style="text-align: center; padding: 30px 20px; align-items: center;">
+            <div class="sentence-header" id="memo-header" style="font-size: 16px; margin-bottom: 15px;">DAY 001</div>
+            <div class="korean-main" id="memo-ko" style="font-size: 24px; margin-bottom: 25px; word-break: keep-all;">한국어</div>
+            
+            <div class="english-hidden-container" style="margin-bottom: 25px;">
+                <div class="english-text" id="memo-en" style="font-size: 22px; padding: 20px; width: 100%; box-sizing: border-box;">English</div>
+            </div>
+
+            <div class="card-controls" style="display: flex; flex-direction: column; width: 100%; gap: 12px; margin-top: 10px;">
+                <button onclick="playMemo()" style="font-size: 16px; padding: 15px; background-color: var(--primary); color: white; border-radius: 8px; width: 100%;">▶ 정답 확인 & 영어 2번 듣기</button>
+                <button onclick="nextMemo()" style="font-size: 16px; padding: 15px; background-color: var(--accent); color: white; border: none; border-radius: 8px; width: 100%;">다음 문장 ➔</button>
+            </div>
+            <div style="margin-top: 20px; width: 100%;">
+                <button onclick="exitMemoMode()" class="stop-btn" style="font-size: 15px; padding: 12px; width: 100%;">■ 암기 모드 종료</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sentences = [
+            { en: "Working from home isn't for me.", ko: "재택근무는 나랑 안 맞아." },
+            { en: "I can't wait to move into the new house.", ko: "새집으로 빨리 이사 가고 싶어." },
+            { en: "Do you mind keeping it a bit short?", ko: "조금만 짧게 해주시겠어요?" },
+            { en: "Everything is getting super expensive.", ko: "모든 게 엄청 비싸지고 있어." },
+            { en: "How do you feel about buying something second-hand, like a used car?", ko: "중고차 같은 중고품을 사는 거 어떻게 생각해?" },
+            { en: "There is nothing like camping to recharge your batteries.", ko: "재충전하는 데는 캠핑만 한 게 없지." },
+            { en: "I am up for anything, as long as it's not too spicy.", ko: "너무 맵지만 않으면 난 아무거나 좋아." },
+            { en: "I don't feel quite right today.", ko: "오늘 몸이 좀 안 좋은 것 같아." },
+            { en: "Would you like me to grab you some coffee while I'm at Starbucks?", ko: "나 스타벅스에 있는 동안 커피 좀 사다 줄까?" },
+            { en: "What price range do you have in mind?", ko: "생각해 두신 가격대가 어떻게 되나요?" },
+            { en: "I was thinking of going to translation grad school.", ko: "통번역 대학원에 진학할까 생각 중이었어." },
+            { en: "I wish I had that much money.", ko: "나한테 그만한 돈이 있으면 좋겠어." },
+            { en: "How does 2:30 sound?", ko: "2시 30분 어때?" },
+            { en: "There is something different about BTS.", ko: "방탄소년단은 뭔가 달라." },
+            { en: "Are you done with your plate?", ko: "그릇 다 쓰셨나요? (다 드셨나요?)" },
+            { en: "This t-shirt looks good on you.", ko: "이 티셔츠 너한테 잘 어울린다." },
+            { en: "Does Tuesday work for you?", ko: "화요일 괜찮으세요?" },
+            { en: "Speaking of which, what happened with you and Nicole last night?", ko: "말이 나와서 말인데, 어젯밤 너랑 니콜 사이에 무슨 일 있었어?" },
+            { en: "I'm taking tomorrow off.", ko: "나 내일 쉬어." },
+            { en: "I'm busy working on my dissertation.", ko: "논문 쓰느라 바빠." },
+            
+            { en: "I don't see it that way.", ko: "난 그렇게 생각하지 않아." },
+            { en: "It was something I could barely afford.", ko: "그건 내가 간신히 살 수 있는 거였어." },
+            { en: "This is all out of my price range.", ko: "이건 다 내 예산을 벗어나." },
+            { en: "You get what you pay for.", ko: "돈 낸 만큼 얻는 법이지. (싼 게 비지떡이지.)" },
+            { en: "I'm glad you found a babysitter.", ko: "베이비시터를 구했다니 다행이다." },
+            { en: "Please feel free to contact me any time between 9 and 6 on weekdays.", ko: "평일 9시에서 6시 사이에 언제든 편하게 연락 주세요." },
+            { en: "Are you drinking coffee at this hour?", ko: "이 시간에 커피를 마셔?" },
+            { en: "You wanna grab some breakfast?", ko: "아침 좀 먹을래?" },
+            { en: "I can't really get used to the smell.", ko: "이 냄새는 정말 적응이 안 돼." },
+            { en: "I wasn't expecting you until tomorrow.", ko: "내일이나 올 줄 알았는데." },
+            { en: "Think of it as a compliment.", ko: "칭찬으로 생각해." },
+            { en: "That explains why you have a southern accent.", ko: "그래서 남부 억양이 있구나." },
+            { en: "I just wanted to make sure we are still on for tonight.", ko: "오늘 밤 약속 유효한지 확인하고 싶어서." },
+            { en: "I look forward to hearing from you.", ko: "답장 기다리겠습니다." },
+            { en: "What is it like working as an Analytical Lead at Google?", ko: "구글에서 분석 리드로 일하는 건 어때?" },
+            { en: "I'd like to get this steak cooked a little more.", ko: "이 스테이크 좀 더 익혀주시면 좋겠어요." },
+            { en: "What are you up to tomorrow night?", ko: "내일 밤에 뭐 해?" },
+            { en: "You caught me just in time.", ko: "딱 맞춰서 잘 왔어." },
+            { en: "Is that for here or to go?", ko: "드시고 가실 건가요, 포장하실 건가요?" },
+            { en: "How about we meet at Sookmyung Women's University Station?", ko: "숙대입구역에서 만나는 거 어때?" },
+
+            { en: "I got you a coffee!", ko: "너 주려고 커피 샀어!" },
+            { en: "I'm good.", ko: "난 괜찮아." },
+            { en: "You figured that out right away.", ko: "바로 알아챘구나." },
+            { en: "I could really use a cup of coffee.", ko: "커피 한 잔 마셨으면 정말 좋겠다." },
+            { en: "It's nice of you to say so.", ko: "그렇게 말씀해 주시니 감사합니다." },
+            { en: "I can't complain at all.", ko: "더할 나위 없이 좋아요. (불만 없어요.)" },
+            { en: "You owe me five bucks.", ko: "너 나한테 5달러 빚졌다." },
+            { en: "I feel the same way.", ko: "나도 같은 생각이야." },
+            { en: "Transferring twice feels like a huge hassle.", ko: "환승을 두 번이나 하는 건 너무 번거로워." },
+            { en: "That's just how things work here.", ko: "여기는 원래 그래." },
+            { en: "I want to get better at golf.", ko: "골프를 더 잘 치고 싶어." },
+            { en: "I can't seem to find the time to exercise.", ko: "운동할 시간을 도무지 낼 수가 없네." },
+            { en: "Daiso has pretty good products for its prices.", ko: "다이소는 가격 대비 제품이 꽤 괜찮아." },
+            { en: "Let's catch up over lunch.", ko: "점심 먹으면서 밀린 얘기 하자." },
+            { en: "Swing by my place for coffee before work.", ko: "출근하기 전에 우리 집에 커피 마시러 들러." },
+            { en: "I'm afraid I already have plans.", ko: "유감스럽게도 이미 선약이 있어." },
+            { en: "Money is a bit tight right now.", ko: "지금 자금 사정이 좀 빠듯해." },
+            { en: "What are the hours like?", ko: "근무 시간이 어떻게 되나요?" },
+            { en: "I have a lot on my plate at work, but it's nothing I can't handle.", ko: "일이 많긴 하지만 감당 못할 정도는 아니야." },
+            { en: "That calls for a party!", ko: "그건 파티를 해야 일이지!" },
+
+            { en: "I'm sorry. I didn't catch that.", ko: "죄송해요. 제대로 못 들었어요." },
+            { en: "No wonder you look so refreshed.", ko: "어쩐지 안색이 좋아 보이더라." },
+            { en: "I can't think of the right thing to say.", ko: "뭐라고 말해야 할지 모르겠어." },
+            { en: "New Year's is just around the corner. Are you going to your parent's house, by the way?", ko: "새해가 코앞인데. 그나저나 부모님 댁에 갈 거야?" },
+            { en: "I wasn't aware of the time.", ko: "시간이 이렇게 된 줄 몰랐어." },
+            { en: "I think I will have to let you go.", ko: "아무래도 이제 끊어야 할 것 같아." },
+            { en: "Lunar New Year is less than a week away.", ko: "설날이 일주일도 안 남았어." },
+            { en: "I don't have time to grab lunch. I'm behind on work.", ko: "점심 먹을 시간이 없어. 일이 밀렸거든." },
+            { en: "That's for sure.", ko: "그건 확실하지." },
+            { en: "You can't go wrong with black.", ko: "검은색으로 하면 실패할 일이 없지." },
+            { en: "Let's go out for some fresh air.", ko: "바람 좀 쐬러 나가자." },
+            { en: "What is this about? Is this about my test results?", ko: "무슨 일이야? 내 검사 결과 때문이야?" },
+            { en: "That sounds like an even better plan to me.", ko: "그게 훨씬 더 좋은 계획 같네." },
+            { en: "It's not like we are in a serious relationship or anything.", ko: "우리가 진지하게 사귀는 그런 사이도 아니잖아." },
+            { en: "Are you sure you don't want to try my sushi? It's really good.", ko: "내 초밥 안 먹어봐도 되겠어? 진짜 맛있는데." },
+            { en: "Sorry about earlier. My phone died.", ko: "아까는 미안해. 폰이 꺼졌어." },
+            { en: "We are not there yet.", ko: "아직 그 단계는 아니야. (아직 도착 안 했어.)" },
+            { en: "I forgot my phone charger at work.", ko: "회사에 폰 충전기를 두고 왔어." },
+            { en: "I have never seen anything like this.", ko: "이런 건 진짜 처음 봐." },
+            { en: "I am at Hansot, picking up dinner.", ko: "저녁 사가려고 한솥에 있어." },
+
+            { en: "I thought maybe we could cancel the reservation and just stay at home.", ko: "예약을 취소하고 그냥 집에 있을까 했지." },
+            { en: "I took a painkiller, but that didn't relieve my migraine.", ko: "진통제를 먹었는데도 편두통이 가시지 않았어." },
+            { en: "I am not really interested in buying another insurance plan.", ko: "다른 보험에 가입하는 데는 별로 관심 없어요." },
+            { en: "Hey, have you got a minute? I'd like to show you the logo I've been working on.", ko: "저기, 잠깐 시간 돼? 내가 작업 중이던 로고 좀 보여주고 싶어서." },
+            { en: "Are you familiar with Myungrang Hotdogs?", ko: "명랑핫도그 알아?" },
+            { en: "I haven't been to Yongnidangil, either.", ko: "나도 용리단길에는 안 가봤어." },
+            { en: "I get a regular salary, unlike other salespeople.", ko: "다른 영업 사원들과 달리 난 고정 급여를 받아." },
+            { en: "In America, hospital stays are unusually expensive.", ko: "미국은 입원비가 유난히 비싸." },
+            { en: "Please let me drive you home. I insist.", ko: "집까지 태워다 줄게. 사양하지 마." },
+            { en: "I like what you have going on here in the living room.", ko: "거실 분위기 좋게 잘 꾸며 놨네." },
+            { en: "10 million won is relatively cheap for a used car, but it's still expensive for me.", ko: "1000만 원이면 중고차치고는 비교적 싼 편이지만, 나한테는 여전히 비싸." },
+            { en: "I think I got this back pain from sitting at a desk all day.", ko: "하루 종일 책상에 앉아 있어서 요통이 생긴 것 같아." },
+            { en: "My hair gets really messy when it rains.", ko: "비가 오면 내 머리는 정말 엉망이 돼." },
+            { en: "We're planning on going to Busan this weekend for Christmas.", ko: "이번 주말 크리스마스에 부산에 갈 계획이야." },
+            { en: "I'm afraid the item you're looking for is out of stock.", ko: "죄송하지만 찾으시는 물건은 품절되었습니다." },
+            { en: "I don't drive nowadays unless I really have to.", ko: "요즘엔 정말 필요한 일 아니면 운전을 안 해." },
+            { en: "That is a great price. I'm afraid I already have a decent massage chair, though.", ko: "가격은 정말 좋네요. 하지만 괜찮은 안마의자가 이미 있어서 아쉽네요." },
+            { en: "Minsu said he spends 33,000 won on his haircuts. That doesn't make sense to me.", ko: "민수는 머리 자르는 데 3만 3천 원을 쓴대. 난 이해가 안 가." },
+            { en: "I don't think things are gonna work out between them.", ko: "그 두 사람은 잘 안 될 것 같아." },
+            { en: "I'm not quite sure if I am doing it right.", ko: "내가 제대로 하고 있는지 잘 모르겠어." }
+        ];
+
+        let isPlayingAll = false;
+        let currentUtterance = null;
+        let currentPlayIndex = 0;
+        let memoIndex = 0;
+
+        const container = document.getElementById('card-container');
+        sentences.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.id = `card-${index}`;
+            
+            card.innerHTML = `
+                <div class="sentence-header">DAY ${String(index + 1).padStart(3, '0')}</div>
+                <div class="korean-main">${item.ko}</div>
+                
+                <div class="english-hidden-container">
+                    <button class="toggle-btn" id="toggle-btn-${index}" onclick="toggleSingleEnglish(${index})">
+                        👀 영어 문장 확인하기
+                    </button>
+                    <div class="english-text" id="eng-${index}">${item.en}</div>
+                </div>
+
+                <div class="card-controls">
+                    <button onclick="playSingle(${index}, 'ko-en2')">해석 ➔ 영어 2번 듣기</button>
+                    <button onclick="playSingle(${index}, 'en2')">영어 2번 듣기</button>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+
+        function toggleSingleEnglish(index) {
+            const engDiv = document.getElementById(`eng-${index}`);
+            const btn = document.getElementById(`toggle-btn-${index}`);
+            
+            if (engDiv.classList.contains('show')) {
+                engDiv.classList.remove('show');
+                btn.style.display = 'block';
+            } else {
+                engDiv.classList.add('show');
+                btn.style.display = 'none';
+            }
+        }
+
+        function toggleAllEnglish(show) {
+            for (let i = 0; i < sentences.length; i++) {
+                const engDiv = document.getElementById(`eng-${i}`);
+                const btn = document.getElementById(`toggle-btn-${i}`);
+                if (show) {
+                    engDiv.classList.add('show');
+                    btn.style.display = 'none';
+                } else {
+                    engDiv.classList.remove('show');
+                    btn.style.display = 'block';
+                }
+            }
+        }
+
+        function speakText(text, lang) {
+            return new Promise((resolve, reject) => {
+                if (!isPlayingAll && currentPlayIndex === -1) return resolve();
+                
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                utterance.rate = 0.9;
+                
+                utterance.onend = () => resolve();
+                utterance.onerror = (e) => {
+                    console.error("Speech error:", e);
+                    resolve();
+                };
+                
+                currentUtterance = utterance;
+                window.speechSynthesis.speak(utterance);
+            });
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function highlightCard(index) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+            if(index >= 0) {
+                const activeCard = document.getElementById(`card-${index}`);
+                activeCard.classList.add('active');
+                activeCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function stopAll() {
+            isPlayingAll = false;
+            currentPlayIndex = -1;
+            window.speechSynthesis.cancel();
+            highlightCard(-1);
+        }
+
+        async function playSequence(index, mode) {
+            const item = sentences[index];
+            if (mode === 'en') {
+                await speakText(item.en, 'en-US');
+            } else if (mode === 'en2') {
+                await speakText(item.en, 'en-US');
+                await delay(600);
+                await speakText(item.en, 'en-US');
+            } else if (mode === 'ko-en') {
+                await speakText(item.ko, 'ko-KR');
+                await delay(600);
+                await speakText(item.en, 'en-US');
+            } else if (mode === 'ko-en2') {
+                await speakText(item.ko, 'ko-KR');
+                await delay(600);
+                await speakText(item.en, 'en-US');
+                await delay(600);
+                await speakText(item.en, 'en-US');
+            }
+        }
+
+        async function playSingle(index, mode) {
+            stopAll();
+            window.speechSynthesis.cancel();
+            await delay(100);
+            
+            currentPlayIndex = index;
+            highlightCard(index);
+            await playSequence(index, mode);
+            highlightCard(-1);
+        }
+
+        async function playAll(mode) {
+            stopAll();
+            window.speechSynthesis.cancel();
+            await delay(200);
+            
+            isPlayingAll = true;
+            for (let i = 0; i < sentences.length; i++) {
+                if (!isPlayingAll) break;
+                currentPlayIndex = i;
+                highlightCard(i);
+                
+                await playSequence(i, mode);
+                
+                if (!isPlayingAll) break;
+                await delay(1200); 
+            }
+            if(isPlayingAll) {
+                isPlayingAll = false;
+                highlightCard(-1);
+            }
+        }
+
+        function startMemoMode() {
+            stopAll();
+            document.getElementById('card-container').style.display = 'none';
+            document.querySelector('.global-controls').style.display = 'none';
+            document.querySelector('.global-controls.secondary').style.display = 'none';
+            
+            document.getElementById('memo-container').style.display = 'block';
+            memoIndex = 0;
+            updateMemoUI();
+        }
+
+        function exitMemoMode() {
+            stopAll();
+            document.getElementById('memo-container').style.display = 'none';
+            document.getElementById('card-container').style.display = 'block';
+            document.querySelector('.global-controls').style.display = 'flex';
+            document.querySelector('.global-controls.secondary').style.display = 'flex';
+        }
+
+        function updateMemoUI() {
+            const item = sentences[memoIndex];
+            document.getElementById('memo-header').innerText = `DAY ${String(memoIndex + 1).padStart(3, '0')} (${memoIndex + 1} / ${sentences.length})`;
+            document.getElementById('memo-ko').innerText = item.ko;
+            document.getElementById('memo-en').innerText = item.en;
+            document.getElementById('memo-en').classList.remove('show');
+        }
+
+        async function playMemo() {
+            stopAll();
+            await delay(100);
+            currentPlayIndex = memoIndex; 
+            
+            const item = sentences[memoIndex];
+            document.getElementById('memo-en').classList.add('show');
+            
+            await speakText(item.en, 'en-US');
+            await delay(600);
+            await speakText(item.en, 'en-US');
+        }
+
+        function nextMemo() {
+            stopAll();
+            if (memoIndex < sentences.length - 1) {
+                memoIndex++;
+                updateMemoUI();
+            } else {
+                alert("마지막 문장입니다.");
+            }
+        }
+    </script>
+</body>
+</html>
