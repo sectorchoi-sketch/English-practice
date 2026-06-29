@@ -246,7 +246,8 @@
         <div class="global-controls">
             <button onclick="playAll('en2')">▶ 모드 1: 전체 재생 (영어만 2번)</button>
             <button onclick="playAll('ko-en2')">▶ 모드 2: 전체 재생 (한글 ➔ 영어 2번)</button>
-            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 모드 3: 암기 모드 시작</button>
+            <button onclick="playAll('ko-en2', 'reverse')">▶ 모드 3: 역순 전체 재생 (한글 ➔ 영어 2번)</button>
+            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 모드 4: 암기 모드 시작</button>
             <button class="stop-btn" onclick="stopAll()">■ 재생 정지</button>
         </div>
         <div class="global-controls secondary">
@@ -528,13 +529,17 @@
             highlightCard(-1);
         }
 
-        async function playAll(mode) {
+        async function playAll(mode, direction = 'forward') {
             stopAll();
             window.speechSynthesis.cancel();
             await delay(200);
             
             isPlayingAll = true;
-            for (let i = 0; i < sentences.length; i++) {
+            const startIndex = direction === 'reverse' ? sentences.length - 1 : 0;
+            const endIndex = direction === 'reverse' ? -1 : sentences.length;
+            const step = direction === 'reverse' ? -1 : 1;
+
+            for (let i = startIndex; i !== endIndex; i += step) {
                 if (!isPlayingAll) break;
                 currentPlayIndex = i;
                 highlightCard(i);
