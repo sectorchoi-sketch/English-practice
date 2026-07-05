@@ -374,6 +374,7 @@
             <button class="set-btn active" id="set-btn-basic" onclick="switchSentenceSet('basic')">기본 100문장</button>
             <button class="set-btn" id="set-btn-mastery" onclick="switchSentenceSet('mastery')">확장 200문장</button>
             <button class="set-btn" id="set-btn-advanced" onclick="switchSentenceSet('advanced')">고급 100문장</button>
+            <button class="set-btn" id="set-btn-opic" onclick="switchSentenceSet('opic')">OPIC AL 100문장</button>
         </div>
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
@@ -394,6 +395,7 @@
                 <button class="set-btn active" id="mobile-set-btn-basic" onclick="switchSentenceSet('basic')">기본</button>
                 <button class="set-btn" id="mobile-set-btn-mastery" onclick="switchSentenceSet('mastery')">확장</button>
                 <button class="set-btn" id="mobile-set-btn-advanced" onclick="switchSentenceSet('advanced')">고급</button>
+                <button class="set-btn" id="mobile-set-btn-opic" onclick="switchSentenceSet('opic')">OPIC</button>
             </div>
             <div class="global-controls">
                 <button onclick="playAll('en2')">▶ 영어2</button>
@@ -868,6 +870,113 @@
             { topic: "관계와 리더십", en: "I would rather have an uncomfortable conversation now than resentment later.", ko: "나중에 앙금이 남는 것보다 지금 불편한 대화를 하는 편이 낫습니다." }
         ];
 
+        const opicSentences = [
+            { topic: "OPIC 답변 구조", en: "To be honest, this is a topic I can talk about from personal experience.", ko: "솔직히 말하면, 이 주제는 제 개인적인 경험을 바탕으로 이야기할 수 있습니다." },
+            { topic: "OPIC 답변 구조", en: "The first thing that comes to mind is a situation I went through not long ago.", ko: "가장 먼저 떠오르는 것은 얼마 전에 제가 겪었던 상황입니다." },
+            { topic: "OPIC 답변 구조", en: "I would say there are two main reasons why I feel that way.", ko: "제가 그렇게 느끼는 데에는 두 가지 주된 이유가 있다고 말할 수 있습니다." },
+            { topic: "OPIC 답변 구조", en: "Let me start with the background so the story makes more sense.", ko: "이야기가 더 잘 이해되도록 배경부터 말씀드리겠습니다." },
+            { topic: "OPIC 답변 구조", en: "What made the experience memorable was not the place itself, but the people I was with.", ko: "그 경험을 기억에 남게 만든 것은 장소 자체가 아니라 함께 있었던 사람들이었습니다." },
+            { topic: "OPIC 답변 구조", en: "At first, I did not think it would be a big deal, but it turned out to be very meaningful.", ko: "처음에는 별일 아니라고 생각했지만, 결국 매우 의미 있는 일이 되었습니다." },
+            { topic: "OPIC 답변 구조", en: "If I had to describe it in one word, I would say it was refreshing.", ko: "그것을 한 단어로 표현해야 한다면, 상쾌했다고 말하겠습니다." },
+            { topic: "OPIC 답변 구조", en: "There are a few details that really stand out in my memory.", ko: "제 기억에 특히 선명하게 남아 있는 몇 가지 세부사항이 있습니다." },
+            { topic: "OPIC 답변 구조", en: "The reason I remember it so clearly is that it changed my perspective.", ko: "제가 그것을 그렇게 선명하게 기억하는 이유는 제 관점을 바꿨기 때문입니다." },
+            { topic: "OPIC 답변 구조", en: "I think this example shows what I value in everyday life.", ko: "이 예시는 제가 일상에서 무엇을 중요하게 여기는지 보여준다고 생각합니다." },
+            { topic: "OPIC 답변 구조", en: "Looking back, I realize that I learned more from it than I expected.", ko: "돌이켜보면, 저는 그 일에서 예상보다 더 많은 것을 배웠습니다." },
+            { topic: "OPIC 답변 구조", en: "It may sound ordinary, but for me it was actually quite special.", ko: "평범하게 들릴 수 있지만, 저에게는 사실 꽤 특별했습니다." },
+            { topic: "OPIC 답변 구조", en: "To give you a clearer picture, I will explain what happened step by step.", ko: "더 명확히 전달하기 위해, 무슨 일이 있었는지 단계별로 설명하겠습니다." },
+            { topic: "OPIC 답변 구조", en: "The main point is that the experience helped me appreciate small things more.", ko: "핵심은 그 경험이 작은 것들을 더 감사하게 여기도록 도와주었다는 것입니다." },
+            { topic: "OPIC 답변 구조", en: "I do not remember every detail, but I clearly remember how I felt.", ko: "모든 세부사항을 기억하진 못하지만, 제가 어떻게 느꼈는지는 분명히 기억합니다." },
+            { topic: "OPIC 답변 구조", en: "This is something I still think about from time to time.", ko: "이것은 제가 아직도 가끔 생각하는 일입니다." },
+            { topic: "OPIC 답변 구조", en: "What I liked most about it was that it felt natural and relaxing.", ko: "제가 그것에서 가장 좋았던 점은 자연스럽고 편안하게 느껴졌다는 것입니다." },
+            { topic: "OPIC 답변 구조", en: "I think many people can relate to this kind of experience.", ko: "많은 사람들이 이런 경험에 공감할 수 있다고 생각합니다." },
+            { topic: "OPIC 답변 구조", en: "It was not perfect, but that made it feel even more real.", ko: "완벽하지는 않았지만, 그래서 오히려 더 현실적으로 느껴졌습니다." },
+            { topic: "OPIC 답변 구조", en: "That is why I would definitely choose to do it again.", ko: "그래서 저는 분명히 그것을 다시 하고 싶습니다." },
+
+            { topic: "경험 묘사", en: "I remember walking into the place and immediately noticing the atmosphere.", ko: "그곳에 들어가자마자 분위기가 눈에 띄었던 것이 기억납니다." },
+            { topic: "경험 묘사", en: "The whole place felt warm, lively, and a little bit different from what I expected.", ko: "그곳 전체가 따뜻하고 활기차며 제가 예상했던 것과 조금 달랐습니다." },
+            { topic: "경험 묘사", en: "I was with a close friend, so I felt comfortable from the beginning.", ko: "친한 친구와 함께 있어서 처음부터 편안했습니다." },
+            { topic: "경험 묘사", en: "We did not plan everything in detail, which made the day more spontaneous.", ko: "우리는 모든 것을 자세히 계획하지 않았고, 그래서 그날이 더 즉흥적으로 느껴졌습니다." },
+            { topic: "경험 묘사", en: "One small moment from that day still makes me smile.", ko: "그날의 작은 순간 하나가 아직도 저를 미소 짓게 합니다." },
+            { topic: "경험 묘사", en: "I was nervous at first, but I slowly started to enjoy myself.", ko: "처음에는 긴장했지만, 점점 즐기기 시작했습니다." },
+            { topic: "경험 묘사", en: "The best part was that I could forget about my daily stress for a while.", ko: "가장 좋았던 점은 잠시 일상의 스트레스를 잊을 수 있었다는 것입니다." },
+            { topic: "경험 묘사", en: "Everything happened so naturally that I did not even notice the time passing.", ko: "모든 것이 너무 자연스럽게 흘러가서 시간이 가는 줄도 몰랐습니다." },
+            { topic: "경험 묘사", en: "I took a few pictures, but the memory itself is much more vivid than the photos.", ko: "사진을 몇 장 찍었지만, 기억 자체가 사진보다 훨씬 더 생생합니다." },
+            { topic: "경험 묘사", en: "What surprised me was how much I enjoyed something so simple.", ko: "저를 놀라게 한 것은 그렇게 단순한 일을 얼마나 즐겼는지였습니다." },
+            { topic: "경험 묘사", en: "The conversation flowed naturally, and that made the experience even better.", ko: "대화가 자연스럽게 이어졌고, 그것이 그 경험을 더 좋게 만들었습니다." },
+            { topic: "경험 묘사", en: "I remember feeling both tired and satisfied at the end of the day.", ko: "하루가 끝날 때 피곤하면서도 만족스러웠던 것이 기억납니다." },
+            { topic: "경험 묘사", en: "It was the kind of day that reminded me to slow down.", ko: "그날은 제게 천천히 살아가야 한다는 것을 떠올리게 해준 날이었습니다." },
+            { topic: "경험 묘사", en: "I did not expect much, so the experience felt even better.", ko: "크게 기대하지 않았기 때문에 그 경험이 더 좋게 느껴졌습니다." },
+            { topic: "경험 묘사", en: "The more I think about it, the more grateful I feel.", ko: "생각할수록 더 감사한 마음이 듭니다." },
+            { topic: "경험 묘사", en: "It gave me a chance to reconnect with people I care about.", ko: "그것은 제가 소중히 여기는 사람들과 다시 가까워질 기회를 주었습니다." },
+            { topic: "경험 묘사", en: "There was nothing fancy about it, but it felt meaningful.", ko: "화려한 것은 없었지만 의미 있게 느껴졌습니다." },
+            { topic: "경험 묘사", en: "I still remember the sounds, the mood, and the little details around me.", ko: "저는 아직도 주변의 소리, 분위기, 작은 세부사항들을 기억합니다." },
+            { topic: "경험 묘사", en: "That experience helped me realize what kind of moments make me happy.", ko: "그 경험은 어떤 순간들이 저를 행복하게 하는지 깨닫게 해주었습니다." },
+            { topic: "경험 묘사", en: "If I could go back, I would not change much about that day.", ko: "돌아갈 수 있다면, 그날에 대해 크게 바꾸고 싶지 않습니다." },
+
+            { topic: "비교와 변화", en: "Compared to the past, I am much more aware of how I spend my time.", ko: "과거와 비교하면, 저는 시간을 어떻게 쓰는지 훨씬 더 의식하게 되었습니다." },
+            { topic: "비교와 변화", en: "I used to care more about convenience, but now I care more about quality.", ko: "예전에는 편리함을 더 중요하게 여겼지만, 지금은 질을 더 중요하게 생각합니다." },
+            { topic: "비교와 변화", en: "My habits have changed gradually rather than all at once.", ko: "제 습관은 한 번에 바뀐 것이 아니라 점진적으로 바뀌었습니다." },
+            { topic: "비교와 변화", en: "These days, I try to choose things that are sustainable in the long run.", ko: "요즘은 장기적으로 지속 가능한 것들을 선택하려고 합니다." },
+            { topic: "비교와 변화", en: "When I was younger, I did not pay much attention to this.", ko: "어렸을 때는 이것에 별로 신경 쓰지 않았습니다." },
+            { topic: "비교와 변화", en: "Now I see it less as a task and more as a part of my lifestyle.", ko: "이제는 그것을 과제라기보다 제 생활 방식의 일부로 봅니다." },
+            { topic: "비교와 변화", en: "The biggest difference is that I have become more intentional.", ko: "가장 큰 차이는 제가 더 의도적으로 행동하게 되었다는 것입니다." },
+            { topic: "비교와 변화", en: "Technology has made it easier, but it has also made people more distracted.", ko: "기술은 그것을 더 쉽게 만들었지만, 동시에 사람들을 더 산만하게 만들었습니다." },
+            { topic: "비교와 변화", en: "I think people today have more options, but less patience.", ko: "오늘날 사람들은 선택지는 더 많지만 인내심은 더 적다고 생각합니다." },
+            { topic: "비교와 변화", en: "The way I think about this has changed as I have gotten older.", ko: "나이가 들면서 이것에 대한 제 생각이 바뀌었습니다." },
+            { topic: "비교와 변화", en: "In the past, I focused on results, but now I care more about the process.", ko: "과거에는 결과에 집중했지만, 지금은 과정에 더 신경 씁니다." },
+            { topic: "비교와 변화", en: "It is not as exciting as it used to be, but it is more meaningful now.", ko: "예전만큼 신나지는 않지만, 지금은 더 의미 있습니다." },
+            { topic: "비교와 변화", en: "My standards have become higher because I know what works for me.", ko: "무엇이 저에게 맞는지 알기 때문에 제 기준이 더 높아졌습니다." },
+            { topic: "비교와 변화", en: "I still enjoy it, but for different reasons than before.", ko: "저는 여전히 그것을 즐기지만, 예전과는 다른 이유 때문입니다." },
+            { topic: "비교와 변화", en: "The more experience I have, the more selective I become.", ko: "경험이 많아질수록 저는 더 선별적으로 변합니다." },
+            { topic: "비교와 변화", en: "What used to feel difficult now feels like a normal part of my routine.", ko: "예전에는 어렵게 느껴졌던 것이 이제는 제 일상의 자연스러운 일부처럼 느껴집니다." },
+            { topic: "비교와 변화", en: "I think the change was small at first, but it made a big difference over time.", ko: "처음에는 작은 변화였지만 시간이 지나며 큰 차이를 만들었다고 생각합니다." },
+            { topic: "비교와 변화", en: "People around me have also influenced the way I approach it.", ko: "주변 사람들도 제가 그것에 접근하는 방식에 영향을 주었습니다." },
+            { topic: "비교와 변화", en: "I have become more practical, but I still try to enjoy the moment.", ko: "저는 더 실용적으로 변했지만, 여전히 순간을 즐기려고 합니다." },
+            { topic: "비교와 변화", en: "Overall, I would say my attitude has become more balanced.", ko: "전반적으로 제 태도는 더 균형 잡히게 되었다고 말하겠습니다." },
+
+            { topic: "문제 해결 롤플레이", en: "I am sorry to bother you, but I need some help with an issue.", ko: "번거롭게 해서 죄송하지만, 한 가지 문제에 대해 도움이 필요합니다." },
+            { topic: "문제 해결 롤플레이", en: "I was expecting something different, so I wanted to ask what my options are.", ko: "제가 기대했던 것과 달라서 어떤 선택지가 있는지 여쭤보고 싶었습니다." },
+            { topic: "문제 해결 롤플레이", en: "Would it be possible to change the date or get a partial refund?", ko: "날짜를 변경하거나 부분 환불을 받을 수 있을까요?" },
+            { topic: "문제 해결 롤플레이", en: "I understand that there may be a policy, but I hope there is some flexibility.", ko: "정책이 있을 수 있다는 것은 이해하지만, 어느 정도 융통성이 있으면 좋겠습니다." },
+            { topic: "문제 해결 롤플레이", en: "Could you check if there is another available option?", ko: "다른 가능한 선택지가 있는지 확인해 주실 수 있나요?" },
+            { topic: "문제 해결 롤플레이", en: "I would really appreciate it if you could make an exception this time.", ko: "이번에는 예외를 적용해 주신다면 정말 감사하겠습니다." },
+            { topic: "문제 해결 롤플레이", en: "The problem is that the current option does not work with my schedule.", ko: "문제는 현재 선택지가 제 일정과 맞지 않는다는 것입니다." },
+            { topic: "문제 해결 롤플레이", en: "I am not trying to complain; I just want to find a reasonable solution.", ko: "불평하려는 것이 아니라 합리적인 해결책을 찾고 싶습니다." },
+            { topic: "문제 해결 롤플레이", en: "If that is not possible, could you suggest the next best alternative?", ko: "그게 불가능하다면 차선책을 제안해 주실 수 있나요?" },
+            { topic: "문제 해결 롤플레이", en: "Let me explain what happened from the beginning.", ko: "처음부터 무슨 일이 있었는지 설명드리겠습니다." },
+            { topic: "문제 해결 롤플레이", en: "There seems to have been a misunderstanding about the reservation.", ko: "예약에 대해 오해가 있었던 것 같습니다." },
+            { topic: "문제 해결 롤플레이", en: "I checked the confirmation email, and it says something slightly different.", ko: "확인 이메일을 확인했는데, 거기에는 조금 다르게 적혀 있습니다." },
+            { topic: "문제 해결 롤플레이", en: "Could you hold on for a moment while I look up the details?", ko: "제가 세부사항을 확인하는 동안 잠시 기다려 주실 수 있나요?" },
+            { topic: "문제 해결 롤플레이", en: "I would like to resolve this today if possible.", ko: "가능하다면 오늘 이 문제를 해결하고 싶습니다." },
+            { topic: "문제 해결 롤플레이", en: "What would you recommend in this situation?", ko: "이 상황에서 무엇을 추천하시겠습니까?" },
+            { topic: "문제 해결 롤플레이", en: "I can be flexible with the time, but not with the location.", ko: "시간은 조정할 수 있지만 장소는 어렵습니다." },
+            { topic: "문제 해결 롤플레이", en: "If you need any additional information, I can provide it right away.", ko: "추가 정보가 필요하시면 바로 제공해 드릴 수 있습니다." },
+            { topic: "문제 해결 롤플레이", en: "Thank you for checking that for me.", ko: "그것을 확인해 주셔서 감사합니다." },
+            { topic: "문제 해결 롤플레이", en: "That solution works for me, as long as there are no extra fees.", ko: "추가 요금이 없다면 그 해결책은 괜찮습니다." },
+            { topic: "문제 해결 롤플레이", en: "I appreciate your help, and I am glad we could sort it out.", ko: "도와주셔서 감사하고, 문제를 해결할 수 있어서 다행입니다." },
+
+            { topic: "의견과 마무리", en: "In my opinion, the best choice depends on what you value most.", ko: "제 생각에는 최고의 선택은 무엇을 가장 중요하게 여기느냐에 달려 있습니다." },
+            { topic: "의견과 마무리", en: "I would not say it is perfect, but it is good enough for most situations.", ko: "완벽하다고 말하진 않겠지만, 대부분의 상황에는 충분히 좋습니다." },
+            { topic: "의견과 마무리", en: "The advantage is clear, but there are also a few drawbacks to consider.", ko: "장점은 분명하지만 고려해야 할 몇 가지 단점도 있습니다." },
+            { topic: "의견과 마무리", en: "Personally, I prefer something practical over something impressive.", ko: "개인적으로 저는 인상적인 것보다 실용적인 것을 선호합니다." },
+            { topic: "의견과 마무리", en: "I think it is worth trying at least once.", ko: "적어도 한 번은 시도해 볼 가치가 있다고 생각합니다." },
+            { topic: "의견과 마무리", en: "It might not be for everyone, but it works well for me.", ko: "모두에게 맞지는 않을 수 있지만, 저에게는 잘 맞습니다." },
+            { topic: "의견과 마무리", en: "What I care about most is whether it fits into my real life.", ko: "제가 가장 중요하게 생각하는 것은 그것이 제 실제 생활에 맞는지입니다." },
+            { topic: "의견과 마무리", en: "I tend to choose the option that gives me less stress in the long run.", ko: "저는 장기적으로 스트레스를 덜 주는 선택지를 고르는 편입니다." },
+            { topic: "의견과 마무리", en: "If I had to recommend it to someone, I would say start small.", ko: "누군가에게 추천해야 한다면, 작게 시작하라고 말하겠습니다." },
+            { topic: "의견과 마무리", en: "The most important thing is to make it realistic, not perfect.", ko: "가장 중요한 것은 완벽하게 만드는 것이 아니라 현실적으로 만드는 것입니다." },
+            { topic: "의견과 마무리", en: "I believe people enjoy things more when they do not put too much pressure on themselves.", ko: "사람들은 스스로에게 너무 많은 압박을 주지 않을 때 더 즐긴다고 믿습니다." },
+            { topic: "의견과 마무리", en: "That is one reason why I try to keep things simple.", ko: "그것이 제가 일을 단순하게 유지하려는 이유 중 하나입니다." },
+            { topic: "의견과 마무리", en: "For me, the emotional side is just as important as the practical side.", ko: "저에게는 감정적인 측면도 실용적인 측면만큼 중요합니다." },
+            { topic: "의견과 마무리", en: "I think small routines can have a surprisingly big impact.", ko: "작은 루틴이 놀라울 정도로 큰 영향을 줄 수 있다고 생각합니다." },
+            { topic: "의견과 마무리", en: "The older I get, the more I value comfort, time, and meaningful relationships.", ko: "나이가 들수록 편안함, 시간, 의미 있는 관계를 더 중요하게 여기게 됩니다." },
+            { topic: "의견과 마무리", en: "If something helps me stay consistent, I consider it a good investment.", ko: "무언가가 제가 꾸준히 하도록 도와준다면, 저는 그것을 좋은 투자라고 생각합니다." },
+            { topic: "의견과 마무리", en: "I would rather do something regularly than do it perfectly once.", ko: "한 번 완벽하게 하는 것보다 꾸준히 하는 편이 낫습니다." },
+            { topic: "의견과 마무리", en: "That is why this topic is more important to me than it may seem.", ko: "그래서 이 주제는 보기보다 저에게 더 중요합니다." },
+            { topic: "의견과 마무리", en: "Overall, I think it has had a positive influence on my life.", ko: "전반적으로 그것은 제 삶에 긍정적인 영향을 주었다고 생각합니다." },
+            { topic: "의견과 마무리", en: "If I were asked again, I would probably give the same answer.", ko: "다시 질문을 받더라도 아마 같은 대답을 할 것입니다." }
+        ];
+
         const sentenceSets = {
             basic: {
                 label: "기본 100문장",
@@ -880,6 +989,10 @@
             advanced: {
                 label: "고급 100문장",
                 sentences: advancedSentences
+            },
+            opic: {
+                label: "OPIC AL 100문장",
+                sentences: opicSentences
             }
         };
 
@@ -937,9 +1050,11 @@
             document.getElementById('set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
+            document.getElementById('set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
             document.getElementById('mobile-set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('mobile-set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('mobile-set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
+            document.getElementById('mobile-set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
             document.getElementById('set-info').innerText = `${sentenceSets[activeSetKey].label} 훈련 중`;
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
