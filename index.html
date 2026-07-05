@@ -247,17 +247,72 @@
         }
         
         @media (max-width: 600px) {
+            header {
+                padding: 8px 10px 10px;
+            }
+            h1 {
+                font-size: 18px;
+                margin-bottom: 6px;
+            }
+            .subtitle {
+                display: none;
+            }
+            .set-info {
+                font-size: 12px;
+                margin-bottom: 6px;
+            }
             .global-controls {
-                flex-direction: column;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 6px;
+                margin-bottom: 6px;
             }
             .global-controls button {
-                width: 100%;
+                width: auto;
+                min-height: 34px;
+                padding: 7px 6px;
+                font-size: 12px;
+                line-height: 1.25;
             }
             .set-controls {
-                flex-direction: column;
+                display: grid;
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 6px;
+                margin-bottom: 6px;
             }
             .set-controls button {
-                width: 100%;
+                width: auto;
+                min-height: 32px;
+                padding: 7px 4px;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+            .global-controls.secondary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                padding-top: 6px;
+            }
+            .container {
+                margin: 12px auto;
+                padding: 0 12px;
+            }
+            .card {
+                padding: 14px;
+                gap: 10px;
+                margin-bottom: 10px;
+            }
+            .sentence-header {
+                font-size: 12px;
+            }
+            .korean-main {
+                font-size: 17px;
+            }
+            .toggle-btn {
+                padding: 10px;
+                font-size: 14px;
+            }
+            .english-text {
+                font-size: 18px;
+                padding: 12px;
             }
             .memo-options {
                 grid-template-columns: 1fr;
@@ -278,15 +333,15 @@
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
         <div class="global-controls">
-            <button onclick="playAll('en2')">▶ 모드 1: 전체 재생 (영어만 2번)</button>
-            <button onclick="playAll('ko-en2')">▶ 모드 2: 전체 재생 (한글 ➔ 영어 2번)</button>
-            <button onclick="playAll('ko-en2', 'reverse')">▶ 모드 3: 역순 전체 재생 (한글 ➔ 영어 2번)</button>
-            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 모드 4: 암기 모드 시작</button>
+            <button onclick="playAll('en2')">▶ 영어 2번</button>
+            <button onclick="playAll('ko-en2')">▶ 한글→영어2</button>
+            <button onclick="playAll('ko-en2', 'reverse')">▶ 역순 재생</button>
+            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 암기 모드</button>
             <button class="stop-btn" onclick="stopAll()">■ 재생 정지</button>
         </div>
         <div class="global-controls secondary">
-            <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 전체 영어 정답 보기</button>
-            <button class="outline-btn" onclick="toggleAllEnglish(false)">🙈 전체 영어 정답 숨기기</button>
+            <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 영어 보기</button>
+            <button class="outline-btn" onclick="toggleAllEnglish(false)">🙈 영어 숨기기</button>
         </div>
     </header>
 
@@ -1009,8 +1064,8 @@
             stopAll();
             document.getElementById('memo-container').style.display = 'none';
             document.getElementById('card-container').style.display = 'block';
-            document.querySelector('.global-controls').style.display = 'flex';
-            document.querySelector('.global-controls.secondary').style.display = 'flex';
+            document.querySelector('.global-controls').style.display = '';
+            document.querySelector('.global-controls.secondary').style.display = '';
         }
 
         function updateMemoUI() {
