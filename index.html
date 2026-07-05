@@ -273,6 +273,7 @@
         <div class="set-controls">
             <button class="set-btn active" id="set-btn-basic" onclick="switchSentenceSet('basic')">기본 100문장</button>
             <button class="set-btn" id="set-btn-mastery" onclick="switchSentenceSet('mastery')">확장 200문장</button>
+            <button class="set-btn" id="set-btn-advanced" onclick="switchSentenceSet('advanced')">고급 100문장</button>
         </div>
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
@@ -643,6 +644,113 @@
             { topic: "고급 커뮤니케이션", en: "Thanks for being direct; it helps us move forward.", ko: "솔직하게 말씀해 주셔서 감사합니다. 덕분에 앞으로 나아갈 수 있습니다." }
         ];
 
+        const advancedSentences = [
+            { topic: "고급 핵심", en: "What matters most is not the idea itself, but how consistently we execute it.", ko: "가장 중요한 것은 아이디어 자체가 아니라 그것을 얼마나 꾸준히 실행하느냐입니다." },
+            { topic: "고급 핵심", en: "I would rather make steady progress than chase a perfect plan.", ko: "완벽한 계획을 쫓기보다 꾸준히 진전시키는 편이 낫습니다." },
+            { topic: "고급 핵심", en: "The real challenge is turning good intentions into repeatable habits.", ko: "진짜 어려운 점은 좋은 의도를 반복 가능한 습관으로 바꾸는 것입니다." },
+            { topic: "고급 핵심", en: "It is easy to agree in principle and much harder to follow through in practice.", ko: "원칙적으로 동의하는 것은 쉽지만 실제로 끝까지 해내는 것은 훨씬 어렵습니다." },
+            { topic: "고급 핵심", en: "We need to be honest about what is working and what is just wishful thinking.", ko: "무엇이 효과가 있고 무엇이 그저 희망사항인지 솔직해야 합니다." },
+            { topic: "고급 핵심", en: "I do not want short-term convenience to create long-term problems.", ko: "단기적인 편리함이 장기적인 문제를 만들게 하고 싶지 않습니다." },
+            { topic: "고급 핵심", en: "The question is whether this decision will still make sense six months from now.", ko: "문제는 이 결정이 6개월 뒤에도 여전히 타당할지입니다." },
+            { topic: "고급 핵심", en: "We should not confuse being busy with being effective.", ko: "바쁜 것과 효과적인 것을 혼동해서는 안 됩니다." },
+            { topic: "고급 핵심", en: "A small improvement that actually sticks is better than a major change that fades away.", ko: "실제로 유지되는 작은 개선이 사라지는 큰 변화보다 낫습니다." },
+            { topic: "고급 핵심", en: "I am trying to make decisions based on patterns, not isolated incidents.", ko: "개별 사건이 아니라 패턴을 바탕으로 결정하려고 합니다." },
+            { topic: "고급 핵심", en: "That sounds simple, but the implications are bigger than they first appear.", ko: "간단하게 들리지만 그 영향은 처음 보이는 것보다 큽니다." },
+            { topic: "고급 핵심", en: "I want to understand the trade-off before we commit to one direction.", ko: "한 방향으로 확정하기 전에 그 절충점을 이해하고 싶습니다." },
+            { topic: "고급 핵심", en: "The more complex the problem is, the more important it is to define it clearly.", ko: "문제가 복잡할수록 그것을 명확히 정의하는 것이 더 중요합니다." },
+            { topic: "고급 핵심", en: "We may need to slow down now so we can move faster later.", ko: "나중에 더 빨리 움직이기 위해 지금은 속도를 늦춰야 할 수도 있습니다." },
+            { topic: "고급 핵심", en: "I am not against the idea; I just want to test the assumptions behind it.", ko: "그 아이디어에 반대하는 것은 아니지만 그 뒤의 가정을 검증하고 싶습니다." },
+            { topic: "고급 핵심", en: "There is a difference between avoiding risk and managing it intelligently.", ko: "위험을 피하는 것과 그것을 영리하게 관리하는 것은 다릅니다." },
+            { topic: "고급 핵심", en: "We should design the process for real people, not ideal behavior.", ko: "이상적인 행동이 아니라 실제 사람들을 기준으로 프로세스를 설계해야 합니다." },
+            { topic: "고급 핵심", en: "I do not think the issue is lack of effort; it is lack of alignment.", ko: "문제는 노력 부족이 아니라 방향성 부족이라고 생각합니다." },
+            { topic: "고급 핵심", en: "This is one of those cases where the details matter more than the headline.", ko: "이건 제목보다 세부사항이 더 중요한 경우 중 하나입니다." },
+            { topic: "고급 핵심", en: "If we get the foundation right, the rest becomes much easier.", ko: "기초를 제대로 잡으면 나머지는 훨씬 쉬워집니다." },
+
+            { topic: "의견 조율", en: "I agree with the overall direction, but I have reservations about the timing.", ko: "전체 방향에는 동의하지만 시점에 대해서는 우려가 있습니다." },
+            { topic: "의견 조율", en: "Can we separate what we know from what we are assuming?", ko: "우리가 아는 것과 가정하는 것을 분리할 수 있을까요?" },
+            { topic: "의견 조율", en: "I want to push back on that point, but only to make the idea stronger.", ko: "그 지점에 이의를 제기하고 싶지만, 아이디어를 더 강하게 만들기 위해서입니다." },
+            { topic: "의견 조율", en: "I may be wrong, but that conclusion feels a little premature.", ko: "제가 틀릴 수도 있지만 그 결론은 조금 이른 것 같습니다." },
+            { topic: "의견 조율", en: "Before we disagree, let's make sure we are talking about the same thing.", ko: "의견이 다르다고 하기 전에 우리가 같은 이야기를 하고 있는지 확인합시다." },
+            { topic: "의견 조율", en: "I can support that if we define clear guardrails.", ko: "명확한 안전장치를 정한다면 그것을 지지할 수 있습니다." },
+            { topic: "의견 조율", en: "That is a valid concern, and I do not want to dismiss it.", ko: "그건 타당한 우려이고 가볍게 넘기고 싶지 않습니다." },
+            { topic: "의견 조율", en: "I think we are closer than it sounds; we are just using different language.", ko: "우리는 말처럼 멀리 있는 게 아니라 서로 다른 표현을 쓰고 있는 것 같습니다." },
+            { topic: "의견 조율", en: "Let's not turn a small disagreement into a bigger conflict.", ko: "작은 의견 차이를 더 큰 갈등으로 만들지 맙시다." },
+            { topic: "의견 조율", en: "I understand why you see it that way, even though I see it differently.", ko: "저는 다르게 보지만 왜 그렇게 보시는지는 이해합니다." },
+            { topic: "의견 조율", en: "Can we agree on the outcome first and debate the method second?", ko: "결과에 먼저 합의하고 방법은 그다음에 논의할 수 있을까요?" },
+            { topic: "의견 조율", en: "I am willing to compromise on the approach, but not on the principle.", ko: "접근 방식은 타협할 수 있지만 원칙은 타협하고 싶지 않습니다." },
+            { topic: "의견 조율", en: "This might be a matter of priorities rather than right or wrong.", ko: "이건 옳고 그름의 문제가 아니라 우선순위의 문제일 수 있습니다." },
+            { topic: "의견 조율", en: "Let me make sure I am not misrepresenting your point.", ko: "제가 당신의 요지를 잘못 전달하고 있지 않은지 확인하겠습니다." },
+            { topic: "의견 조율", en: "I do not need everyone to agree with me, but I do need us to be clear.", ko: "모두가 저에게 동의할 필요는 없지만, 우리는 명확해야 합니다." },
+            { topic: "의견 조율", en: "There is probably more nuance here than we are giving it credit for.", ko: "여기에는 우리가 생각하는 것보다 더 많은 미묘한 차이가 있을 것입니다." },
+            { topic: "의견 조율", en: "I am open to that, as long as we are explicit about the risks.", ko: "위험을 명확히 한다면 그 방안에 열려 있습니다." },
+            { topic: "의견 조율", en: "Let's avoid making this personal and focus on the decision.", ko: "이것을 개인적인 문제로 만들지 말고 결정 자체에 집중합시다." },
+            { topic: "의견 조율", en: "I think your concern is fair; I just weigh the risk differently.", ko: "당신의 우려는 타당하다고 생각합니다. 다만 저는 위험의 무게를 다르게 봅니다." },
+            { topic: "의견 조율", en: "If we cannot agree today, let's at least agree on the next step.", ko: "오늘 합의하지 못하더라도 적어도 다음 단계에는 합의합시다." },
+
+            { topic: "문제 해결", en: "Let's identify the constraint that is actually holding us back.", ko: "실제로 우리를 막고 있는 제약이 무엇인지 찾아봅시다." },
+            { topic: "문제 해결", en: "The symptom is obvious, but the root cause is still unclear.", ko: "증상은 분명하지만 근본 원인은 아직 불분명합니다." },
+            { topic: "문제 해결", en: "We should solve the bottleneck before optimizing everything else.", ko: "다른 모든 것을 최적화하기 전에 병목부터 해결해야 합니다." },
+            { topic: "문제 해결", en: "A temporary workaround is fine, but we still need a permanent fix.", ko: "임시 해결책은 괜찮지만 영구적인 해결책도 필요합니다." },
+            { topic: "문제 해결", en: "Let's test the simplest explanation first.", ko: "가장 단순한 설명부터 먼저 검증해 봅시다." },
+            { topic: "문제 해결", en: "If this fails, what is our backup plan?", ko: "이게 실패하면 우리의 대안은 무엇인가요?" },
+            { topic: "문제 해결", en: "We are spending too much time on edge cases.", ko: "우리는 예외적인 경우에 너무 많은 시간을 쓰고 있습니다." },
+            { topic: "문제 해결", en: "This solution works now, but I am not sure it will scale.", ko: "이 해결책은 지금은 작동하지만 확장 가능할지는 잘 모르겠습니다." },
+            { topic: "문제 해결", en: "Let's define what would count as enough evidence.", ko: "무엇을 충분한 증거로 볼지 정의합시다." },
+            { topic: "문제 해결", en: "I want to avoid solving a problem that only exists in theory.", ko: "이론상으로만 존재하는 문제를 해결하는 것은 피하고 싶습니다." },
+            { topic: "문제 해결", en: "The fastest fix is not always the least expensive one.", ko: "가장 빠른 해결책이 항상 가장 저렴한 것은 아닙니다." },
+            { topic: "문제 해결", en: "We need to decide whether to simplify the requirement or expand the timeline.", ko: "요구사항을 단순화할지 일정을 늘릴지 결정해야 합니다." },
+            { topic: "문제 해결", en: "This is a signal that our process needs adjustment.", ko: "이건 우리의 프로세스에 조정이 필요하다는 신호입니다." },
+            { topic: "문제 해결", en: "Let's look for the smallest change that would make the biggest difference.", ko: "가장 큰 차이를 만들 수 있는 가장 작은 변화를 찾아봅시다." },
+            { topic: "문제 해결", en: "The cost of doing nothing may be higher than the cost of acting now.", ko: "아무것도 하지 않는 비용이 지금 행동하는 비용보다 클 수 있습니다." },
+            { topic: "문제 해결", en: "I do not want us to patch the surface and ignore the pattern.", ko: "표면만 고치고 패턴을 무시하고 싶지 않습니다." },
+            { topic: "문제 해결", en: "We should make the failure visible so we can learn from it.", ko: "실패를 보이게 만들어야 그것에서 배울 수 있습니다." },
+            { topic: "문제 해결", en: "This seems urgent, but we should still confirm the impact.", ko: "긴급해 보이지만 그래도 영향을 확인해야 합니다." },
+            { topic: "문제 해결", en: "Let's not add complexity unless it solves a real problem.", ko: "실제 문제를 해결하지 않는 한 복잡성을 추가하지 맙시다." },
+            { topic: "문제 해결", en: "The goal is not to be right; it is to find what works.", ko: "목표는 옳아지는 것이 아니라 효과가 있는 것을 찾는 것입니다." },
+
+            { topic: "설득과 설명", en: "The reason I am suggesting this is that it reduces uncertainty.", ko: "제가 이것을 제안하는 이유는 불확실성을 줄여주기 때문입니다." },
+            { topic: "설득과 설명", en: "Let me explain the logic behind my recommendation.", ko: "제 추천 뒤에 있는 논리를 설명하겠습니다." },
+            { topic: "설득과 설명", en: "This may not be the most exciting option, but it is the most reliable one.", ko: "가장 흥미로운 선택지는 아닐 수 있지만 가장 신뢰할 수 있는 선택지입니다." },
+            { topic: "설득과 설명", en: "The value is not obvious at first, but it compounds over time.", ko: "가치는 처음에는 분명하지 않지만 시간이 지나며 누적됩니다." },
+            { topic: "설득과 설명", en: "I am not asking for a big commitment, just a small experiment.", ko: "큰 약속을 요구하는 것이 아니라 작은 실험만 요청하는 것입니다." },
+            { topic: "설득과 설명", en: "This gives us more options without locking us into one path.", ko: "이것은 한 경로에 묶이지 않으면서 더 많은 선택지를 줍니다." },
+            { topic: "설득과 설명", en: "If we frame it that way, it becomes much easier to explain.", ko: "그렇게 틀을 잡으면 설명하기가 훨씬 쉬워집니다." },
+            { topic: "설득과 설명", en: "The benefit is not just speed; it is consistency.", ko: "이점은 단지 속도만이 아니라 일관성입니다." },
+            { topic: "설득과 설명", en: "I would describe it as a practical compromise, not a step backward.", ko: "저는 그것을 후퇴가 아니라 실용적인 타협이라고 설명하겠습니다." },
+            { topic: "설득과 설명", en: "The point is to make the right behavior easier to repeat.", ko: "핵심은 올바른 행동을 더 쉽게 반복하게 만드는 것입니다." },
+            { topic: "설득과 설명", en: "This approach gives us a clearer way to measure progress.", ko: "이 접근법은 진전을 측정하는 더 명확한 방법을 제공합니다." },
+            { topic: "설득과 설명", en: "I think the upside is worth the limited risk.", ko: "제한된 위험에 비해 장점이 충분히 크다고 생각합니다." },
+            { topic: "설득과 설명", en: "The simpler version may actually be more persuasive.", ko: "더 단순한 버전이 오히려 더 설득력 있을 수 있습니다." },
+            { topic: "설득과 설명", en: "What makes this useful is that it works across different situations.", ko: "이것이 유용한 이유는 다양한 상황에서 작동하기 때문입니다." },
+            { topic: "설득과 설명", en: "I am trying to optimize for clarity, not sophistication.", ko: "저는 세련됨이 아니라 명확성을 최적화하려고 합니다." },
+            { topic: "설득과 설명", en: "The main advantage is that it makes the decision easier to defend.", ko: "가장 큰 장점은 그 결정을 더 쉽게 설명하고 방어할 수 있다는 것입니다." },
+            { topic: "설득과 설명", en: "This is not a shortcut; it is a way to reduce unnecessary friction.", ko: "이건 지름길이 아니라 불필요한 마찰을 줄이는 방법입니다." },
+            { topic: "설득과 설명", en: "I want the reasoning to be clear even to someone who was not in the room.", ko: "그 자리에 없던 사람에게도 논리가 명확하길 원합니다." },
+            { topic: "설득과 설명", en: "If we can explain it simply, we probably understand it well enough.", ko: "우리가 그것을 간단히 설명할 수 있다면 충분히 이해하고 있는 것입니다." },
+            { topic: "설득과 설명", en: "The argument becomes stronger when we acknowledge the downside openly.", ko: "단점을 솔직히 인정할 때 주장은 더 강해집니다." },
+
+            { topic: "관계와 리더십", en: "I want to give feedback in a way that is useful, not discouraging.", ko: "좌절시키는 방식이 아니라 도움이 되는 방식으로 피드백을 주고 싶습니다." },
+            { topic: "관계와 리더십", en: "I appreciate the effort, even if the result was not what we expected.", ko: "결과가 기대와 달랐더라도 그 노력은 고맙게 생각합니다." },
+            { topic: "관계와 리더십", en: "Let's make sure the quiet people in the room also have a chance to speak.", ko: "회의실의 조용한 사람들도 말할 기회를 갖도록 합시다." },
+            { topic: "관계와 리더십", en: "I do not want this to become a habit we silently accept.", ko: "이것이 우리가 조용히 받아들이는 습관이 되지 않았으면 합니다." },
+            { topic: "관계와 리더십", en: "Thank you for raising the issue instead of letting it build up.", ko: "문제가 쌓이게 두지 않고 제기해 주셔서 감사합니다." },
+            { topic: "관계와 리더십", en: "I should have communicated that more clearly from the beginning.", ko: "처음부터 그것을 더 명확히 전달했어야 했습니다." },
+            { topic: "관계와 리더십", en: "I want to understand what support would actually help you.", ko: "어떤 지원이 실제로 도움이 될지 이해하고 싶습니다." },
+            { topic: "관계와 리더십", en: "We can disagree and still treat each other with respect.", ko: "우리는 의견이 달라도 서로를 존중할 수 있습니다." },
+            { topic: "관계와 리더십", en: "I do not want to assume intent when the impact is what we need to address.", ko: "우리가 다뤄야 할 것이 영향이라면 의도를 단정하고 싶지 않습니다." },
+            { topic: "관계와 리더십", en: "Let's create enough trust that people can share bad news early.", ko: "사람들이 나쁜 소식을 일찍 공유할 수 있을 만큼의 신뢰를 만듭시다." },
+            { topic: "관계와 리더십", en: "I want to be direct without being careless.", ko: "무심하지 않으면서도 솔직하고 싶습니다." },
+            { topic: "관계와 리더십", en: "The goal is accountability without unnecessary shame.", ko: "목표는 불필요한 수치심 없이 책임을 지는 것입니다." },
+            { topic: "관계와 리더십", en: "I trust your judgment, but I would like to understand your reasoning.", ko: "당신의 판단을 신뢰하지만 그 이유를 이해하고 싶습니다." },
+            { topic: "관계와 리더십", en: "Let's not let one difficult conversation damage the relationship.", ko: "어려운 대화 하나가 관계를 해치게 하지 맙시다." },
+            { topic: "관계와 리더십", en: "I can take responsibility for my part in this.", ko: "이 일에서 제 몫의 책임은 질 수 있습니다." },
+            { topic: "관계와 리더십", en: "It is better to address confusion early than frustration later.", ko: "나중에 좌절을 다루는 것보다 초기에 혼란을 다루는 것이 낫습니다." },
+            { topic: "관계와 리더십", en: "I want us to build a culture where questions are welcomed.", ko: "질문이 환영받는 문화를 만들고 싶습니다." },
+            { topic: "관계와 리더십", en: "Your point changed how I think about the situation.", ko: "당신의 지적이 이 상황에 대한 제 생각을 바꿨습니다." },
+            { topic: "관계와 리더십", en: "Let's make the expectation explicit so no one has to guess.", ko: "아무도 추측하지 않도록 기대치를 명확히 합시다." },
+            { topic: "관계와 리더십", en: "I would rather have an uncomfortable conversation now than resentment later.", ko: "나중에 앙금이 남는 것보다 지금 불편한 대화를 하는 편이 낫습니다." }
+        ];
+
         const sentenceSets = {
             basic: {
                 label: "기본 100문장",
@@ -651,6 +759,10 @@
             mastery: {
                 label: "확장 200문장",
                 sentences: masterySentences
+            },
+            advanced: {
+                label: "고급 100문장",
+                sentences: advancedSentences
             }
         };
 
@@ -707,6 +819,7 @@
             renderCards();
             document.getElementById('set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
+            document.getElementById('set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('set-info').innerText = `${sentenceSets[activeSetKey].label} 훈련 중`;
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
