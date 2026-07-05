@@ -74,6 +74,21 @@
             font-size: 13px;
             margin-bottom: 10px;
         }
+        .mobile-more {
+            display: none;
+        }
+        .mobile-more summary {
+            list-style: none;
+            background-color: #f8fafc;
+            color: var(--primary);
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .mobile-more summary::-webkit-details-marker {
+            display: none;
+        }
         button {
             background-color: var(--primary);
             color: white;
@@ -248,52 +263,81 @@
         
         @media (max-width: 600px) {
             header {
-                padding: 8px 10px 10px;
+                padding: 6px 8px 8px;
             }
             h1 {
-                font-size: 18px;
-                margin-bottom: 6px;
+                display: none;
             }
             .subtitle {
                 display: none;
             }
             .set-info {
                 font-size: 12px;
-                margin-bottom: 6px;
+                margin-bottom: 4px;
+                font-weight: 700;
             }
             .global-controls {
                 display: grid;
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-                gap: 6px;
-                margin-bottom: 6px;
+                grid-template-columns: 1fr 1fr 42px;
+                gap: 5px;
+                margin-bottom: 0;
             }
             .global-controls button {
                 width: auto;
-                min-height: 34px;
-                padding: 7px 6px;
+                min-height: 30px;
+                padding: 5px 4px;
                 font-size: 12px;
-                line-height: 1.25;
+                line-height: 1.15;
             }
             .set-controls {
+                display: none;
+            }
+            .mobile-more {
+                display: block;
+                margin-top: 5px;
+            }
+            .mobile-more summary {
+                min-height: 28px;
+                padding: 5px 6px;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+            .mobile-more .set-controls,
+            .mobile-more .global-controls,
+            .mobile-more .global-controls.secondary {
                 display: grid;
+            }
+            .mobile-more .set-controls {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+                gap: 6px;
+                margin: 6px 0;
+            }
+            .mobile-more .set-controls button,
+            .mobile-more .global-controls button {
+                width: auto;
+                min-height: 30px;
+                padding: 5px 4px;
+                font-size: 12px;
+                line-height: 1.2;
+            }
+            .mobile-more .global-controls {
                 grid-template-columns: repeat(3, minmax(0, 1fr));
                 gap: 6px;
                 margin-bottom: 6px;
             }
-            .set-controls button {
-                width: auto;
-                min-height: 32px;
-                padding: 7px 4px;
-                font-size: 12px;
-                line-height: 1.2;
-            }
-            .global-controls.secondary {
+            .mobile-more .global-controls.secondary {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 padding-top: 6px;
             }
+            header > .global-controls.secondary {
+                display: none;
+            }
+            header > .global-controls button:not(.mobile-primary) {
+                display: none;
+            }
             .container {
-                margin: 12px auto;
-                padding: 0 12px;
+                margin: 8px auto;
+                padding: 0 8px;
             }
             .card {
                 padding: 14px;
@@ -325,7 +369,7 @@
     <header>
         <h1>영어 스피킹 암기 훈련</h1>
         <div class="subtitle">한국어를 보고 영어를 즉각적으로 떠올려 보세요.</div>
-        <div class="set-controls">
+        <div class="set-controls desktop-set-controls">
             <button class="set-btn active" id="set-btn-basic" onclick="switchSentenceSet('basic')">기본 100문장</button>
             <button class="set-btn" id="set-btn-mastery" onclick="switchSentenceSet('mastery')">확장 200문장</button>
             <button class="set-btn" id="set-btn-advanced" onclick="switchSentenceSet('advanced')">고급 100문장</button>
@@ -333,16 +377,33 @@
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
         <div class="global-controls">
+            <button class="mobile-primary" onclick="playAll('ko-en2')">▶ 한글→영어2</button>
+            <button class="mobile-primary" style="background-color: var(--accent);" onclick="startMemoMode()">🧠 암기</button>
+            <button class="mobile-primary stop-btn" onclick="stopAll()">■</button>
             <button onclick="playAll('en2')">▶ 영어 2번</button>
-            <button onclick="playAll('ko-en2')">▶ 한글→영어2</button>
             <button onclick="playAll('ko-en2', 'reverse')">▶ 역순 재생</button>
-            <button style="background-color: var(--accent);" onclick="startMemoMode()">🧠 암기 모드</button>
-            <button class="stop-btn" onclick="stopAll()">■ 재생 정지</button>
         </div>
         <div class="global-controls secondary">
             <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 영어 보기</button>
             <button class="outline-btn" onclick="toggleAllEnglish(false)">🙈 영어 숨기기</button>
         </div>
+        <details class="mobile-more">
+            <summary>옵션</summary>
+            <div class="set-controls">
+                <button class="set-btn active" id="mobile-set-btn-basic" onclick="switchSentenceSet('basic')">기본</button>
+                <button class="set-btn" id="mobile-set-btn-mastery" onclick="switchSentenceSet('mastery')">확장</button>
+                <button class="set-btn" id="mobile-set-btn-advanced" onclick="switchSentenceSet('advanced')">고급</button>
+            </div>
+            <div class="global-controls">
+                <button onclick="playAll('en2')">▶ 영어2</button>
+                <button onclick="playAll('ko-en2')">▶ 한→영2</button>
+                <button onclick="playAll('ko-en2', 'reverse')">▶ 역순</button>
+            </div>
+            <div class="global-controls secondary">
+                <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 보기</button>
+                <button class="outline-btn" onclick="toggleAllEnglish(false)">🙈 숨기기</button>
+            </div>
+        </details>
     </header>
 
     <div class="container" id="card-container">
@@ -875,6 +936,9 @@
             document.getElementById('set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
+            document.getElementById('mobile-set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
+            document.getElementById('mobile-set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
+            document.getElementById('mobile-set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('set-info').innerText = `${sentenceSets[activeSetKey].label} 훈련 중`;
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
