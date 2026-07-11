@@ -154,6 +154,48 @@
             color: var(--text-main);
             word-break: keep-all;
         }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+        .list-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .sentence-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .list-item {
+            background-color: var(--card-bg);
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .list-no {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--text-sub);
+            margin-bottom: 6px;
+        }
+        .list-ko {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+            word-break: keep-all;
+        }
+        .list-en {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+        }
         
         .english-hidden-container {
             width: 100%;
@@ -350,6 +392,28 @@
             .korean-main {
                 font-size: 17px;
             }
+            .list-header {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background-color: var(--bg-color);
+                padding: 8px 0;
+                margin-bottom: 8px;
+            }
+            .list-title {
+                font-size: 15px;
+            }
+            .sentence-list {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+            .list-item {
+                padding: 10px;
+            }
+            .list-ko,
+            .list-en {
+                font-size: 13px;
+            }
             .toggle-btn {
                 padding: 10px;
                 font-size: 14px;
@@ -385,6 +449,7 @@
             <button class="mobile-primary stop-btn" onclick="stopAll()">■</button>
             <button onclick="playAll('en2')">▶ 영어 2번</button>
             <button onclick="playAll('ko-en2', 'reverse')">▶ 역순 재생</button>
+            <button onclick="showSentenceList()">📋 목록</button>
         </div>
         <div class="global-controls secondary">
             <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 영어 보기</button>
@@ -403,6 +468,7 @@
                 <button onclick="playAll('en2')">▶ 영어2</button>
                 <button onclick="playAll('ko-en2')">▶ 한→영2</button>
                 <button onclick="playAll('ko-en2', 'reverse')">▶ 역순</button>
+                <button onclick="showSentenceList()">📋 목록</button>
             </div>
             <div class="global-controls secondary">
                 <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 보기</button>
@@ -412,6 +478,14 @@
     </header>
 
     <div class="container" id="card-container">
+    </div>
+
+    <div class="container" id="list-container" style="display: none;">
+        <div class="list-header">
+            <div class="list-title" id="list-title">문장 목록</div>
+            <button class="outline-btn" onclick="hideSentenceList()">카드 보기</button>
+        </div>
+        <div class="sentence-list" id="sentence-list"></div>
     </div>
 
     <div class="container" id="memo-container" style="display: none;">
@@ -1249,6 +1323,39 @@
 
         renderCards();
 
+        function renderSentenceList() {
+            const list = document.getElementById('sentence-list');
+            list.innerHTML = '';
+            document.getElementById('list-title').innerText = `${sentenceSets[activeSetKey].label} 전체 목록`;
+
+            activeSentences.forEach((item, index) => {
+                const row = document.createElement('div');
+                row.className = 'list-item';
+                const topicLabel = item.topic ? ` · ${item.topic}` : '';
+                row.innerHTML = `
+                    <div class="list-no">${String(index + 1).padStart(3, '0')}${topicLabel}</div>
+                    <div class="list-ko">${item.ko}</div>
+                    <div class="list-en">${item.en}</div>
+                `;
+                list.appendChild(row);
+            });
+        }
+
+        function showSentenceList() {
+            stopAll();
+            renderSentenceList();
+            document.getElementById('memo-container').style.display = 'none';
+            document.getElementById('card-container').style.display = 'none';
+            document.getElementById('list-container').style.display = 'block';
+        }
+
+        function hideSentenceList() {
+            stopAll();
+            document.getElementById('list-container').style.display = 'none';
+            document.getElementById('memo-container').style.display = 'none';
+            document.getElementById('card-container').style.display = 'block';
+        }
+
         function switchSentenceSet(setKey) {
             if (!sentenceSets[setKey] || activeSetKey === setKey) return;
 
@@ -1273,6 +1380,10 @@
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
 
+            if (document.getElementById('list-container').style.display === 'block') {
+                renderSentenceList();
+            }
+
             if (document.getElementById('memo-container').style.display === 'block') {
                 updateMemoUI();
             }
@@ -1295,6 +1406,7 @@
             for (let i = 0; i < activeSentences.length; i++) {
                 const engDiv = document.getElementById(`eng-${i}`);
                 const btn = document.getElementById(`toggle-btn-${i}`);
+                if (!engDiv || !btn) continue;
                 if (show) {
                     engDiv.classList.add('show');
                     btn.style.display = 'none';
@@ -1405,6 +1517,7 @@
         function startMemoMode() {
             stopAll();
             document.getElementById('card-container').style.display = 'none';
+            document.getElementById('list-container').style.display = 'none';
             document.querySelector('.global-controls').style.display = 'none';
             document.querySelector('.global-controls.secondary').style.display = 'none';
             
@@ -1457,6 +1570,7 @@
         function exitMemoMode() {
             stopAll();
             document.getElementById('memo-container').style.display = 'none';
+            document.getElementById('list-container').style.display = 'none';
             document.getElementById('card-container').style.display = 'block';
             document.querySelector('.global-controls').style.display = '';
             document.querySelector('.global-controls.secondary').style.display = '';
