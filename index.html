@@ -375,6 +375,7 @@
             <button class="set-btn" id="set-btn-mastery" onclick="switchSentenceSet('mastery')">확장 200문장</button>
             <button class="set-btn" id="set-btn-advanced" onclick="switchSentenceSet('advanced')">고급 100문장</button>
             <button class="set-btn" id="set-btn-opic" onclick="switchSentenceSet('opic')">OPIC AL 100문장</button>
+            <button class="set-btn" id="set-btn-phrasal" onclick="switchSentenceSet('phrasal')">구동사 200문장</button>
         </div>
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
@@ -396,6 +397,7 @@
                 <button class="set-btn" id="mobile-set-btn-mastery" onclick="switchSentenceSet('mastery')">확장</button>
                 <button class="set-btn" id="mobile-set-btn-advanced" onclick="switchSentenceSet('advanced')">고급</button>
                 <button class="set-btn" id="mobile-set-btn-opic" onclick="switchSentenceSet('opic')">OPIC</button>
+                <button class="set-btn" id="mobile-set-btn-phrasal" onclick="switchSentenceSet('phrasal')">구동사</button>
             </div>
             <div class="global-controls">
                 <button onclick="playAll('en2')">▶ 영어2</button>
@@ -977,6 +979,212 @@
             { topic: "의견과 마무리", en: "If I were asked again, I would probably give the same answer.", ko: "다시 질문을 받더라도 아마 같은 대답을 할 것입니다." }
         ];
 
+        const phrasalSentences = `
+일상 빈출 구동사|I need to get up early tomorrow.|내일 일찍 일어나야 해.
+일상 빈출 구동사|Can you wake me up at seven?|7시에 나 좀 깨워줄래?
+일상 빈출 구동사|I usually put off cleaning until the weekend.|나는 보통 청소를 주말까지 미뤄.
+일상 빈출 구동사|I ran out of milk this morning.|오늘 아침에 우유가 다 떨어졌어.
+일상 빈출 구동사|Could you pick up some bread on your way home?|집에 오는 길에 빵 좀 사다 줄래?
+일상 빈출 구동사|I need to throw out these old receipts.|이 오래된 영수증들을 버려야 해.
+일상 빈출 구동사|Hang on, I will be ready in a minute.|잠깐만, 1분 안에 준비될게.
+일상 빈출 구동사|I left out one important detail.|중요한 세부사항 하나를 빠뜨렸어.
+일상 빈출 구동사|Let's eat out tonight instead of cooking.|오늘 밤은 요리하지 말고 외식하자.
+일상 빈출 구동사|I have to drop off a package before work.|출근 전에 택배를 맡겨야 해.
+일상 빈출 구동사|The meeting got pushed back to three.|회의가 3시로 미뤄졌어.
+일상 빈출 구동사|I will look over the file tonight.|오늘 밤에 그 파일을 검토할게.
+일상 빈출 구동사|Please write down the address before you forget.|잊기 전에 주소를 적어 둬.
+일상 빈출 구동사|I need to figure out what to wear.|뭘 입을지 알아내야 해.
+일상 빈출 구동사|I ended up staying home all day.|결국 하루 종일 집에 있었어.
+일상 빈출 구동사|The lights went out during the storm.|폭풍이 치는 동안 불이 나갔어.
+일상 빈출 구동사|I bumped into an old friend at the cafe.|카페에서 옛 친구를 우연히 만났어.
+일상 빈출 구동사|I need to catch up on laundry.|밀린 빨래를 해야 해.
+일상 빈출 구동사|Please turn down the volume a little.|소리 좀 줄여줘.
+일상 빈출 구동사|I forgot to turn off the heater.|히터 끄는 걸 깜빡했어.
+감정과 관계|I am trying to get over what happened.|일어난 일을 극복하려고 노력 중이야.
+감정과 관계|She opened up about her family problems.|그녀는 가족 문제에 대해 마음을 열고 털어놨어.
+감정과 관계|He backed me up when nobody else did.|아무도 그러지 않았을 때 그가 나를 지지해 줬어.
+감정과 관계|I do not want to let you down.|널 실망시키고 싶지 않아.
+감정과 관계|We made up after a long argument.|우리는 긴 말다툼 후에 화해했어.
+감정과 관계|I think we grew apart over the years.|우리는 수년에 걸쳐 멀어진 것 같아.
+감정과 관계|I can always count on her.|나는 항상 그녀를 믿고 의지할 수 있어.
+감정과 관계|Do not take it out on me.|나한테 화풀이하지 마.
+감정과 관계|He is hard to get along with sometimes.|그는 가끔 함께 지내기 어려워.
+감정과 관계|She stood up for me in front of everyone.|그녀는 모두 앞에서 내 편을 들어줬어.
+감정과 관계|I do not want to bring up the past.|과거 이야기를 꺼내고 싶지 않아.
+감정과 관계|They broke up last month.|그들은 지난달에 헤어졌어.
+감정과 관계|I still look up to my older brother.|나는 아직도 형을 존경해.
+감정과 관계|She looks down on people who disagree with her.|그녀는 자신과 의견이 다른 사람들을 깔봐.
+감정과 관계|I need time to cool down.|진정할 시간이 필요해.
+감정과 관계|He came across as rude at first.|그는 처음에는 무례하게 보였어.
+감정과 관계|I hope we can work things out.|우리가 문제를 잘 해결할 수 있으면 좋겠어.
+감정과 관계|She cheered me up when I was down.|내가 우울했을 때 그녀가 기운 나게 해줬어.
+감정과 관계|I cannot put up with his attitude anymore.|더 이상 그의 태도를 참을 수 없어.
+감정과 관계|We hit it off right away.|우리는 바로 잘 통했어.
+일과 계획|Let's go over the plan one more time.|계획을 한 번 더 검토해 보자.
+일과 계획|I need to catch up with my emails.|밀린 이메일을 따라잡아야 해.
+일과 계획|Can you fill me in on what I missed?|내가 놓친 내용을 알려줄 수 있어?
+일과 계획|We should follow up after the meeting.|회의 후에 후속 조치를 해야 해.
+일과 계획|The project is starting to fall behind.|프로젝트가 뒤처지기 시작하고 있어.
+일과 계획|We need to come up with a better idea.|우리는 더 나은 아이디어를 생각해 내야 해.
+일과 계획|I will take care of the report.|보고서는 내가 처리할게.
+일과 계획|Let's set up a quick call.|짧게 통화 일정을 잡자.
+일과 계획|The deadline is coming up fast.|마감일이 빠르게 다가오고 있어.
+일과 계획|I have to wrap up this task today.|오늘 이 일을 마무리해야 해.
+일과 계획|We need to sort out the budget first.|먼저 예산을 정리해야 해.
+일과 계획|Can you look into the issue?|그 문제를 조사해 줄 수 있어?
+일과 계획|I will bring it up with the manager.|그걸 매니저에게 꺼내볼게.
+일과 계획|We cannot rule out that possibility.|그 가능성을 배제할 수는 없어.
+일과 계획|The numbers do not add up.|숫자가 앞뒤가 맞지 않아.
+일과 계획|I need to block out time for deep work.|집중 업무 시간을 따로 확보해야 해.
+일과 계획|Let's narrow down the options.|선택지를 좁혀 보자.
+일과 계획|The client signed off on the final design.|클라이언트가 최종 디자인을 승인했어.
+일과 계획|We had to call off the event.|우리는 행사를 취소해야 했어.
+일과 계획|I will send out the updated schedule.|업데이트된 일정을 발송할게.
+문제와 갈등|We need to deal with this before it gets worse.|더 나빠지기 전에 이 문제를 처리해야 해.
+문제와 갈등|I do not know how to bring this up.|이 이야기를 어떻게 꺼내야 할지 모르겠어.
+문제와 갈등|The plan fell through at the last minute.|계획이 마지막 순간에 무산됐어.
+문제와 갈등|Do not blow this out of proportion.|이걸 너무 과장하지 마.
+문제와 갈등|We need to clear up the misunderstanding.|오해를 풀어야 해.
+문제와 갈등|I messed up and I am sorry.|내가 망쳤어, 미안해.
+문제와 갈등|He tried to cover up his mistake.|그는 자신의 실수를 덮으려고 했어.
+문제와 갈등|The truth finally came out.|진실이 마침내 드러났어.
+문제와 갈등|I do not want to get dragged into this.|이 일에 끌려들어가고 싶지 않아.
+문제와 갈등|She snapped at me for no reason.|그녀가 이유 없이 나에게 쏘아붙였어.
+문제와 갈등|Let's talk it over before we decide.|결정하기 전에 그것에 대해 이야기해 보자.
+문제와 갈등|I am trying to hold back my anger.|화를 참으려고 하고 있어.
+문제와 갈등|He backed out at the last second.|그가 마지막 순간에 발을 뺐어.
+문제와 갈등|We have to own up to our mistakes.|우리는 우리의 실수를 인정해야 해.
+문제와 갈등|Do not brush off my concerns.|내 걱정을 대수롭지 않게 넘기지 마.
+문제와 갈등|The situation got out of hand quickly.|상황이 빠르게 걷잡을 수 없게 됐어.
+문제와 갈등|I need to step back and think.|한 발 물러서서 생각해야 해.
+문제와 갈등|We should not give in too easily.|너무 쉽게 양보해서는 안 돼.
+문제와 갈등|I will not let this slide next time.|다음번에는 이걸 그냥 넘어가지 않을 거야.
+문제와 갈등|Let's move on before this ruins the night.|이 일이 밤을 망치기 전에 넘어가자.
+전화와 대화|Can you speak up a little?|조금 더 크게 말해 줄래?
+전화와 대화|Sorry, you cut out for a second.|미안, 잠깐 목소리가 끊겼어.
+전화와 대화|I will call you back in ten minutes.|10분 후에 다시 전화할게.
+전화와 대화|Do not hang up yet.|아직 끊지 마.
+전화와 대화|Let me put you through to the right person.|담당자에게 연결해 드릴게요.
+전화와 대화|I need to get back to you on that.|그건 확인 후에 다시 연락드려야 해요.
+전화와 대화|Can you slow down a bit?|조금 천천히 말해 줄 수 있어?
+전화와 대화|I did not catch what you said.|네가 한 말을 못 알아들었어.
+전화와 대화|Let me write that down.|그거 적어둘게.
+전화와 대화|I will check in with you later.|나중에 안부 겸 확인할게.
+전화와 대화|She brought up an interesting point.|그녀가 흥미로운 점을 꺼냈어.
+전화와 대화|He kept cutting me off.|그가 계속 내 말을 끊었어.
+전화와 대화|Can we pick up where we left off?|우리가 멈춘 곳부터 다시 이어갈 수 있을까?
+전화와 대화|I need to think it over.|그걸 좀 곰곰이 생각해 봐야 해.
+전화와 대화|She pointed out a problem I had missed.|그녀가 내가 놓친 문제를 지적했어.
+전화와 대화|Let me sum up what we agreed on.|우리가 합의한 내용을 요약할게.
+전화와 대화|I do not want to get into that right now.|지금은 그 이야기에 들어가고 싶지 않아.
+전화와 대화|Can you spell that out for me?|그걸 철자로 말해 줄 수 있어?
+전화와 대화|I will pass along the message.|그 메시지를 전달할게.
+전화와 대화|Thanks for reaching out.|연락해 줘서 고마워.
+이동과 외출|Let's head out before traffic gets bad.|차가 막히기 전에 출발하자.
+이동과 외출|I need to check out of the hotel by noon.|정오까지 호텔에서 체크아웃해야 해.
+이동과 외출|We should stop by the pharmacy.|약국에 잠깐 들러야 해.
+이동과 외출|Can you drop me off at the station?|역에 내려줄 수 있어?
+이동과 외출|I will pick you up at eight.|8시에 데리러 갈게.
+이동과 외출|We set off before sunrise.|우리는 해 뜨기 전에 출발했어.
+이동과 외출|The plane took off on time.|비행기가 제시간에 이륙했어.
+이동과 외출|The train pulled in right on time.|기차가 정확히 제시간에 들어왔어.
+이동과 외출|We got off at the wrong stop.|우리는 잘못된 정류장에서 내렸어.
+이동과 외출|I got on the wrong bus.|잘못된 버스를 탔어.
+이동과 외출|The car broke down on the highway.|차가 고속도로에서 고장 났어.
+이동과 외출|Pull over when it is safe.|안전할 때 차를 세워.
+이동과 외출|We need to fill up the tank.|기름을 가득 채워야 해.
+이동과 외출|I am looking forward to the trip.|그 여행이 기대돼.
+이동과 외출|The trip wore me out.|그 여행은 나를 완전히 지치게 했어.
+이동과 외출|Let's get away for the weekend.|주말에 어디 좀 다녀오자.
+이동과 외출|We checked in two hours before the flight.|우리는 비행기 두 시간 전에 체크인했어.
+이동과 외출|I need to print out my boarding pass.|탑승권을 출력해야 해.
+이동과 외출|The road was blocked off after the accident.|사고 후에 도로가 차단됐어.
+이동과 외출|We ended up walking the rest of the way.|결국 나머지 길은 걸어갔어.
+집과 생활|I need to clean up the kitchen.|부엌을 치워야 해.
+집과 생활|Please put away your shoes.|신발 좀 정리해 둬.
+집과 생활|I am going to tidy up before they arrive.|그들이 오기 전에 정리할 거야.
+집과 생활|The kids messed up the living room.|아이들이 거실을 어질러 놨어.
+집과 생활|We need to fix up the spare room.|남는 방을 손봐야 해.
+집과 생활|I finally threw away the broken chair.|드디어 부서진 의자를 버렸어.
+집과 생활|Can you take out the trash?|쓰레기 좀 내다 버려줄래?
+집과 생활|I have to wash up before dinner.|저녁 먹기 전에 씻어야 해.
+집과 생활|The laundry piled up again.|빨래가 또 쌓였어.
+집과 생활|I need to stock up on toilet paper.|화장지를 좀 비축해 둬야 해.
+집과 생활|We are trying to cut down on waste.|우리는 쓰레기를 줄이려고 노력 중이야.
+집과 생활|I turned on the air conditioner.|에어컨을 켰어.
+집과 생활|Please turn off the lights when you leave.|나갈 때 불을 꺼줘.
+집과 생활|The dog knocked over the lamp.|개가 스탠드를 넘어뜨렸어.
+집과 생활|I need to look after my nephew tonight.|오늘 밤 조카를 돌봐야 해.
+집과 생활|We are trying to save up for a bigger place.|우리는 더 큰 집을 위해 돈을 모으고 있어.
+집과 생활|The heater takes a while to warm up.|히터가 데워지는 데 시간이 좀 걸려.
+집과 생활|I forgot to lock up before bed.|자기 전에 문단속하는 걸 깜빡했어.
+집과 생활|Let's clear out the closet this weekend.|이번 주말에 옷장을 정리하자.
+집과 생활|I need to plug in my phone.|휴대폰을 충전기에 꽂아야 해.
+공부와 성장|I need to brush up on my English.|영어를 다시 갈고닦아야 해.
+공부와 성장|I picked up a few useful phrases from the show.|그 드라마에서 유용한 표현 몇 개를 익혔어.
+공부와 성장|It took me a while to catch on.|이해하는 데 시간이 좀 걸렸어.
+공부와 성장|I am trying to keep up with the class.|수업을 따라가려고 노력 중이야.
+공부와 성장|I fell behind after missing two lessons.|수업 두 번을 빠진 후 뒤처졌어.
+공부와 성장|Let's go back over the difficult part.|어려운 부분을 다시 복습하자.
+공부와 성장|I need to look up this expression.|이 표현을 찾아봐야 해.
+공부와 성장|The meaning finally sank in.|그 의미가 드디어 와닿았어.
+공부와 성장|Do not give up after one bad day.|하루 망쳤다고 포기하지 마.
+공부와 성장|I want to build up my confidence.|자신감을 쌓고 싶어.
+공부와 성장|I need to work on my pronunciation.|발음을 개선해야 해.
+공부와 성장|She caught up quickly after practicing every day.|그녀는 매일 연습한 후 빠르게 따라잡았어.
+공부와 성장|I have to cut back on social media.|소셜 미디어 사용을 줄여야 해.
+공부와 성장|I am trying to stick with my routine.|루틴을 계속 지키려고 노력 중이야.
+공부와 성장|He found out he learns better by speaking.|그는 말하면서 배울 때 더 잘 배운다는 걸 알게 됐어.
+공부와 성장|I need to get across my ideas more clearly.|내 생각을 더 명확하게 전달해야 해.
+공부와 성장|The teacher pointed out my biggest mistake.|선생님이 내 가장 큰 실수를 지적했어.
+공부와 성장|I will try out this method for a week.|이 방법을 일주일 동안 시도해 볼게.
+공부와 성장|I need to keep at it even when I am tired.|피곤해도 계속 해내야 해.
+공부와 성장|Everything started to come together after a month.|한 달 후에 모든 것이 맞아떨어지기 시작했어.
+돈과 쇼핑|I cannot afford to shell out that much money.|그렇게 많은 돈을 털어낼 여유가 없어.
+돈과 쇼핑|The price went up again.|가격이 또 올랐어.
+돈과 쇼핑|I am trying to cut down on unnecessary spending.|불필요한 지출을 줄이려고 하고 있어.
+돈과 쇼핑|This deal sounds too good to pass up.|이 혜택은 놓치기엔 너무 좋아 보여.
+돈과 쇼핑|I picked out a gift for my mom.|엄마 선물을 골랐어.
+돈과 쇼핑|Can I try on this jacket?|이 재킷 입어봐도 될까요?
+돈과 쇼핑|I need to return this because it does not fit.|이건 맞지 않아서 반품해야 해.
+돈과 쇼핑|They sold out of the color I wanted.|내가 원하던 색상이 품절됐어.
+돈과 쇼핑|I am saving up for a new laptop.|새 노트북을 사려고 돈을 모으고 있어.
+돈과 쇼핑|Do not fall for every discount you see.|보이는 할인마다 속지 마.
+돈과 쇼핑|I need to pay off my credit card.|신용카드 대금을 갚아야 해.
+돈과 쇼핑|The repair ended up costing more than expected.|수리비가 결국 예상보다 더 많이 들었어.
+돈과 쇼핑|I will look around before I decide.|결정하기 전에 좀 둘러볼게.
+돈과 쇼핑|They marked down all the winter coats.|겨울 코트들을 모두 할인했어.
+돈과 쇼핑|I need to use up these coupons before they expire.|만료되기 전에 이 쿠폰들을 다 써야 해.
+돈과 쇼핑|The cashier rang up the wrong item.|계산원이 잘못된 상품을 계산했어.
+돈과 쇼핑|I should not have bought into the hype.|그 과장된 분위기에 넘어가지 말았어야 했어.
+돈과 쇼핑|Can you break down the total cost?|총 비용을 항목별로 설명해 줄 수 있어?
+돈과 쇼핑|I am trying to hold onto my savings.|저축한 돈을 지키려고 하고 있어.
+돈과 쇼핑|That subscription adds up over time.|그 구독료는 시간이 지나면 꽤 쌓여.
+미드식 리액션|Do not freak out, but I have something to tell you.|놀라지 마, 할 말이 있어.
+미드식 리액션|I cannot believe you pulled that off.|네가 그걸 해냈다니 믿기지 않아.
+미드식 리액션|That totally caught me off guard.|그건 완전히 예상 밖이었어.
+미드식 리액션|You need to calm down.|진정해야 해.
+미드식 리액션|I will not put up with this.|이건 참지 않을 거야.
+미드식 리액션|You are making this up, right?|너 이거 지어내는 거지?
+미드식 리액션|I knew you would come around.|네가 결국 마음을 바꿀 줄 알았어.
+미드식 리액션|That does not make up for what you did.|그걸로 네가 한 일이 보상되지는 않아.
+미드식 리액션|I am not backing down this time.|이번에는 물러서지 않을 거야.
+미드식 리액션|You really need to lighten up.|너 정말 좀 마음을 가볍게 가져야 해.
+미드식 리액션|I did not see that coming.|그건 예상 못 했어.
+미드식 리액션|Stop showing off.|잘난 척 좀 그만해.
+미드식 리액션|I am just trying to look out for you.|난 그냥 널 챙기려는 거야.
+미드식 리액션|Do not chicken out now.|이제 와서 겁먹고 빼지 마.
+미드식 리액션|You have to snap out of it.|정신 차려야 해.
+미드식 리액션|I am done putting up with excuses.|변명 참아주는 건 이제 끝이야.
+미드식 리액션|That joke did not land, but nice try.|그 농담은 안 먹혔지만 시도는 좋았어.
+미드식 리액션|I cannot get over how good this is.|이게 얼마나 좋은지 아직도 믿기지 않아.
+미드식 리액션|You are blowing this way out of proportion.|너 이걸 너무 크게 만들고 있어.
+미드식 리액션|Let's not get carried away.|너무 흥분해서 과하게 나가지 말자.
+        `.trim().split('\n').map(line => {
+            const [topic, en, ko] = line.split('|');
+            return { topic, en, ko };
+        });
+
         const sentenceSets = {
             basic: {
                 label: "기본 100문장",
@@ -993,6 +1201,10 @@
             opic: {
                 label: "OPIC AL 100문장",
                 sentences: opicSentences
+            },
+            phrasal: {
+                label: "구동사 200문장",
+                sentences: phrasalSentences
             }
         };
 
@@ -1051,10 +1263,12 @@
             document.getElementById('set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
+            document.getElementById('set-btn-phrasal').classList.toggle('active', activeSetKey === 'phrasal');
             document.getElementById('mobile-set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('mobile-set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('mobile-set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('mobile-set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
+            document.getElementById('mobile-set-btn-phrasal').classList.toggle('active', activeSetKey === 'phrasal');
             document.getElementById('set-info').innerText = `${sentenceSets[activeSetKey].label} 훈련 중`;
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
