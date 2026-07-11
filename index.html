@@ -440,6 +440,7 @@
             <button class="set-btn" id="set-btn-advanced" onclick="switchSentenceSet('advanced')">고급 100문장</button>
             <button class="set-btn" id="set-btn-opic" onclick="switchSentenceSet('opic')">OPIC AL 100문장</button>
             <button class="set-btn" id="set-btn-phrasal" onclick="switchSentenceSet('phrasal')">구동사 200문장</button>
+            <button class="set-btn" id="set-btn-wimpy" onclick="switchSentenceSet('wimpy')">Wimpy식 200문장</button>
         </div>
         <div class="set-info" id="set-info">기본 100문장 훈련 중</div>
         
@@ -463,6 +464,7 @@
                 <button class="set-btn" id="mobile-set-btn-advanced" onclick="switchSentenceSet('advanced')">고급</button>
                 <button class="set-btn" id="mobile-set-btn-opic" onclick="switchSentenceSet('opic')">OPIC</button>
                 <button class="set-btn" id="mobile-set-btn-phrasal" onclick="switchSentenceSet('phrasal')">구동사</button>
+                <button class="set-btn" id="mobile-set-btn-wimpy" onclick="switchSentenceSet('wimpy')">Wimpy</button>
             </div>
             <div class="global-controls">
                 <button onclick="playAll('en2')">▶ 영어2</button>
@@ -1259,6 +1261,44 @@
             return { topic, en, ko };
         });
 
+        const wimpyScenes = [
+            { topic: "학교생활", event: "homeroom", koEvent: "아침 조회", person: "my teacher", koPerson: "선생님", thing: "my homework", koThing: "숙제" },
+            { topic: "친구관계", event: "lunch break", koEvent: "점심시간", person: "my best friend", koPerson: "절친", thing: "the group chat", koThing: "단체 채팅" },
+            { topic: "가족소동", event: "family dinner", koEvent: "가족 저녁식사", person: "my little brother", koPerson: "남동생", thing: "my room", koThing: "내 방" },
+            { topic: "변명과 실수", event: "the quiz", koEvent: "퀴즈", person: "the teacher", koPerson: "선생님", thing: "my excuse", koThing: "내 변명" },
+            { topic: "장난과 문제", event: "the prank", koEvent: "장난", person: "the principal", koPerson: "교장 선생님", thing: "the evidence", koThing: "증거" },
+            { topic: "점심과 쉬는시간", event: "recess", koEvent: "쉬는 시간", person: "the hall monitor", koPerson: "복도 감독", thing: "my snack", koThing: "내 간식" },
+            { topic: "게임과 취미", event: "game night", koEvent: "게임하는 밤", person: "my cousin", koPerson: "사촌", thing: "my saved game", koThing: "저장된 게임" },
+            { topic: "어색한 순간", event: "the school assembly", koEvent: "학교 조회", person: "everyone", koPerson: "모두", thing: "my joke", koThing: "내 농담" },
+            { topic: "인기와 체면", event: "the class photo", koEvent: "학급 사진", person: "the popular kid", koPerson: "인기 많은 애", thing: "my plan", koThing: "내 계획" },
+            { topic: "독백과 결심", event: "the whole situation", koEvent: "그 모든 상황", person: "myself", koPerson: "나 자신", thing: "the lesson", koThing: "그 교훈" }
+        ];
+
+        const wimpyPatterns = [
+            s => ({ topic: s.topic, en: `I tried to blend in during ${s.event}, but it totally backfired.`, ko: `${s.koEvent} 때 튀지 않으려 했지만 완전히 역효과가 났어.` }),
+            s => ({ topic: s.topic, en: `${s.person} called me out before I could come up with an answer.`, ko: `${s.koPerson}이 내가 대답을 생각해 내기도 전에 나를 지적했어.` }),
+            s => ({ topic: s.topic, en: `I tried to play it cool, but ${s.thing} gave me away.`, ko: `태연한 척하려고 했지만 ${s.koThing} 때문에 들켰어.` }),
+            s => ({ topic: s.topic, en: `I made up a story, and it fell apart almost immediately.`, ko: `이야기를 지어냈는데 거의 바로 들통났어.` }),
+            s => ({ topic: s.topic, en: `I wanted to back out, but it was already too late.`, ko: `빠지고 싶었지만 이미 너무 늦었어.` }),
+            s => ({ topic: s.topic, en: `${s.thing} turned out to be a much bigger deal than I expected.`, ko: `${s.koThing}은 내가 예상한 것보다 훨씬 더 큰 일이 됐어.` }),
+            s => ({ topic: s.topic, en: `I tried to talk my way out of it, but nobody bought it.`, ko: `말로 빠져나가려 했지만 아무도 믿지 않았어.` }),
+            s => ({ topic: s.topic, en: `The whole thing got out of hand in about ten seconds.`, ko: `모든 일이 10초 만에 걷잡을 수 없게 됐어.` }),
+            s => ({ topic: s.topic, en: `I ended up taking the blame for something I barely did.`, ko: `나는 거의 하지도 않은 일의 책임을 결국 뒤집어썼어.` }),
+            s => ({ topic: s.topic, en: `I should have seen it coming, but I did not.`, ko: `그럴 줄 알았어야 했는데 그러지 못했어.` }),
+            s => ({ topic: s.topic, en: `${s.person} showed up at the worst possible moment.`, ko: `${s.koPerson}이 최악의 순간에 나타났어.` }),
+            s => ({ topic: s.topic, en: `I tried to cover it up, but that only made things worse.`, ko: `그걸 덮으려 했지만 상황만 더 나빠졌어.` }),
+            s => ({ topic: s.topic, en: `Everyone cracked up, and I wanted to disappear.`, ko: `모두가 빵 터졌고 나는 사라지고 싶었어.` }),
+            s => ({ topic: s.topic, en: `I got dragged into ${s.event} even though I had a bad feeling about it.`, ko: `안 좋은 예감이 들었는데도 ${s.koEvent}에 끌려들어갔어.` }),
+            s => ({ topic: s.topic, en: `I tried to keep up, but I had no idea what was going on.`, ko: `따라가려고 했지만 무슨 일이 벌어지는지 전혀 몰랐어.` }),
+            s => ({ topic: s.topic, en: `${s.thing} came up again when I least expected it.`, ko: `전혀 예상하지 못했을 때 ${s.koThing} 이야기가 다시 나왔어.` }),
+            s => ({ topic: s.topic, en: `I had to own up to it because the evidence was everywhere.`, ko: `증거가 사방에 있어서 결국 인정해야 했어.` }),
+            s => ({ topic: s.topic, en: `I tried to laugh it off, but the silence dragged on forever.`, ko: `웃어넘기려 했지만 침묵이 끝없이 이어졌어.` }),
+            s => ({ topic: s.topic, en: `I promised myself I would never fall for that again.`, ko: `다시는 그런 것에 넘어가지 않겠다고 스스로에게 약속했어.` }),
+            s => ({ topic: s.topic, en: `Looking back, I probably should have stayed out of it.`, ko: `돌이켜보면 아마 그 일에 끼지 말았어야 했어.` })
+        ];
+
+        const wimpySentences = wimpyScenes.flatMap(scene => wimpyPatterns.map(pattern => pattern(scene)));
+
         const sentenceSets = {
             basic: {
                 label: "기본 100문장",
@@ -1279,6 +1319,10 @@
             phrasal: {
                 label: "구동사 200문장",
                 sentences: phrasalSentences
+            },
+            wimpy: {
+                label: "Wimpy식 200문장",
+                sentences: wimpySentences
             }
         };
 
@@ -1371,11 +1415,13 @@
             document.getElementById('set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
             document.getElementById('set-btn-phrasal').classList.toggle('active', activeSetKey === 'phrasal');
+            document.getElementById('set-btn-wimpy').classList.toggle('active', activeSetKey === 'wimpy');
             document.getElementById('mobile-set-btn-basic').classList.toggle('active', activeSetKey === 'basic');
             document.getElementById('mobile-set-btn-mastery').classList.toggle('active', activeSetKey === 'mastery');
             document.getElementById('mobile-set-btn-advanced').classList.toggle('active', activeSetKey === 'advanced');
             document.getElementById('mobile-set-btn-opic').classList.toggle('active', activeSetKey === 'opic');
             document.getElementById('mobile-set-btn-phrasal').classList.toggle('active', activeSetKey === 'phrasal');
+            document.getElementById('mobile-set-btn-wimpy').classList.toggle('active', activeSetKey === 'wimpy');
             document.getElementById('set-info').innerText = `${sentenceSets[activeSetKey].label} 훈련 중`;
             document.getElementById('memo-start-number').max = activeSentences.length;
             document.getElementById('memo-start-number').value = 1;
