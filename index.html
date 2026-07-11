@@ -320,7 +320,7 @@
             }
             .global-controls {
                 display: grid;
-                grid-template-columns: 1fr 1fr 42px;
+                grid-template-columns: 1fr 1fr 42px 52px;
                 gap: 5px;
                 margin-bottom: 0;
             }
@@ -449,7 +449,7 @@
             <button class="mobile-primary stop-btn" onclick="stopAll()">■</button>
             <button onclick="playAll('en2')">▶ 영어 2번</button>
             <button onclick="playAll('ko-en2', 'reverse')">▶ 역순 재생</button>
-            <button onclick="showSentenceList()">📋 목록</button>
+            <button class="mobile-primary" onclick="showSentenceList()">📋 목록</button>
         </div>
         <div class="global-controls secondary">
             <button class="outline-btn" onclick="toggleAllEnglish(true)">👀 영어 보기</button>
